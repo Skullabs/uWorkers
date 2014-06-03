@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>io.uworkers</groupId>
+		<version>0.1-SNAPSHOT</version>
+		<artifactId>uworkers-parent</artifactId>
+	</parent>
+
+	<artifactId>uworkers</artifactId>
+	<name>micro Workers: Core</name>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<!-- Main Dependencies -->
+		<dependency>
+			<groupId>org.jboss.spec.javax.jms</groupId>
+			<artifactId>jboss-jms-api_1.1_spec</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.skullabs.trip</groupId>
+			<artifactId>trip-core</artifactId>
+		</dependency>
+		<!-- Provided Libraries -->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.skullabs.trip</groupId>
+			<artifactId>trip-processor</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>
