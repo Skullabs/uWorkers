@@ -8,6 +8,8 @@ import java.util.concurrent.CountDownLatch;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import trip.spi.Service;
+import uworkers.api.Consumer;
 import uworkers.api.WorkerException;
 import uworkers.core.AbstractSubscriber;
 import uworkers.core.endpoint.MQProvider;
@@ -15,6 +17,7 @@ import uworkers.core.endpoint.MQProvider;
 @Getter
 @Accessors( fluent = true )
 @RequiredArgsConstructor
+@Service( Consumer.class )
 public class HelloSubscriber extends AbstractSubscriber<Hello> {
 
 	final String endpointName;

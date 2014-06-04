@@ -1,6 +1,7 @@
 package uworkers.utils;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 
 import org.junit.After;
@@ -29,5 +30,11 @@ public class TestCase {
 	}
 
 	public void tearDown() throws Exception {
+	}
+
+	@SneakyThrows
+	public <T> T provideOn( T target ) {
+		provider.provideOn( target );
+		return target;
 	}
 }

@@ -2,6 +2,8 @@ package uworkers.core.endpoint;
 
 import java.io.Serializable;
 
+import javax.jms.DeliveryMode;
+import javax.jms.Destination;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
@@ -18,14 +20,17 @@ import uworkers.utils.Fibonacci;
 @Log
 @Getter
 @Accessors( fluent = true )
-public abstract class AbstractEndpoint implements ExceptionListener, Endpoint {
+public abstract class AbstractEndpoint<T extends Session> implements ExceptionListener, Endpoint {
 
 	private static final int TIME_TO_WAIT_BEFORE_START_LOGGING_ERROR = 10;
 	private static final int LESS_THAN_A_MINUTE = 50;
 	private static final int SECONDS = 1000;
 
+	@Getter( lazy = true ) private final MessageConsumer consumer = createMessageConsumer();
+	@Getter( lazy = true ) private final MessageProducer producer = createMessageProducer();
+
 	javax.jms.Connection connection;
-	Session currentSession;
+	T currentSession;
 
 	@Override
 	public void onException( JMSException exception ) {
@@ -40,7 +45,13 @@ public abstract class AbstractEndpoint implements ExceptionListener, Endpoint {
 
 	@Override
 	public void start() throws InterruptedException, JMSException {
-		setupEndpoint();
+		if ( connection == null )
+			setupEndpoint();
+	}
+
+	@Override
+	public void startAndListenMessages() throws InterruptedException, JMSException {
+		start();
 		this.connection.start();
 	}
 
@@ -70,19 +81,20 @@ public abstract class AbstractEndpoint implements ExceptionListener, Endpoint {
 
 	@Override
 	public void connect() throws JMSException {
-		Connection connection = createConnection();
+		Connection<T> connection = createConnection();
 		this.connection = connection.connection();
 		this.connection.setExceptionListener( this );
 		this.currentSession = connection.session();
 	}
 
-	protected abstract Connection createConnection() throws JMSException;
+	protected abstract Connection<T> createConnection() throws JMSException;
 
 	@Override
 	public void stop() {
 		try {
 			if ( connection != null )
 				connection.close();
+			connection = null;
 		} catch ( JMSException cause ) {
 			log.severe( cause.getMessage() );
 		}
@@ -99,12 +111,10 @@ public abstract class AbstractEndpoint implements ExceptionListener, Endpoint {
 		producer().send( message );
 	}
 
-	protected abstract MessageProducer producer();
-
 	@Override
 	@SuppressWarnings( "unchecked" )
-	public <T extends Serializable> T receive( Class<T> target ) throws JMSException {
-		return (T)receive();
+	public <V extends Serializable> V receive( Class<V> target ) throws JMSException {
+		return (V)receive();
 	}
 
 	@Override
@@ -113,5 +123,23 @@ public abstract class AbstractEndpoint implements ExceptionListener, Endpoint {
 		return received.getObject();
 	}
 
-	protected abstract MessageConsumer consumer();
+	MessageConsumer createMessageConsumer() {
+		try {
+			return currentSession().createConsumer( destination() );
+		} catch ( JMSException cause ) {
+			throw new RuntimeException( cause );
+		}
+	}
+
+	MessageProducer createMessageProducer() {
+		try {
+			MessageProducer producer = currentSession().createProducer( destination() );
+			producer.setDeliveryMode( DeliveryMode.NON_PERSISTENT );
+			return producer;
+		} catch ( JMSException cause ) {
+			throw new RuntimeException( cause );
+		}
+	}
+
+	protected abstract Destination destination();
 }

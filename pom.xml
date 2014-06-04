@@ -51,7 +51,7 @@
 		<version.junit>4.10</version.junit>
 		<version.lombok>1.12.4</version.lombok>
 		<version.mockito>1.9.5</version.mockito>
-		<version.trip>0.9</version.trip>
+		<version.trip>0.10-SNAPSHOT</version.trip>
 		<version.config>1.2.0</version.config>
 		<version.jboss.jee>1.0.1.Final</version.jboss.jee>
 		<version.activemq.client>5.9.0</version.activemq.client>
@@ -283,8 +283,8 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>${project.build.directory}/generated-sources/annotations</source>
-								<source>${project.build.directory}/generated-sources/test-annotations</source>
+<!-- 								<source>${project.build.directory}/generated-sources/annotations</source> -->
+<!-- 								<source>${project.build.directory}/generated-sources/test-annotations</source> -->
 							</sources>
 						</configuration>
 					</execution>

@@ -9,7 +9,7 @@ import uworkers.core.endpoint.WorkerEndpoint;
 @Accessors( fluent = true )
 public abstract class AbstractWorker<T> extends AbstractConsumer<T> {
 
-	final WorkerEndpoint endpoint = new WorkerEndpoint( endpointName(), mqProvider() );
+	@Getter( lazy = true ) private final WorkerEndpoint endpoint = new WorkerEndpoint( endpointName(), mqProvider() );
 
 	protected abstract String endpointName();
 

@@ -8,6 +8,8 @@ public interface Endpoint {
 
 	void start() throws InterruptedException, JMSException;
 
+	void startAndListenMessages() throws InterruptedException, JMSException;
+
 	void connect() throws JMSException;
 
 	void stop();
