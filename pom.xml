@@ -44,6 +44,7 @@
 
 	<modules>
 		<module>uworkers</module>
+		<module>uworkers-processor</module>
 	</modules>
 
 	<properties>
@@ -53,6 +54,7 @@
 		<version.mockito>1.9.5</version.mockito>
 		<version.trip>0.10-SNAPSHOT</version.trip>
 		<version.config>1.2.0</version.config>
+		<version.mustache>0.8.14</version.mustache>
 		<version.jboss.jee>1.0.1.Final</version.jboss.jee>
 		<version.activemq.client>5.9.0</version.activemq.client>
 		<version.activemq.core>5.7.0</version.activemq.core>
@@ -131,6 +133,11 @@
 				<groupId>org.jboss.spec.javax.jms</groupId>
 				<artifactId>jboss-jms-api_1.1_spec</artifactId>
 				<version>${version.jboss.jee}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.spullara.mustache.java</groupId>
+				<artifactId>compiler</artifactId>
+				<version>${version.mustache}</version>
 			</dependency>
 			<!-- Module dependencies -->
 			<dependency>
@@ -223,8 +230,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${version.maven.plugin}</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<optimize>false</optimize>
 					<debug>true</debug>
 					<encoding>UTF-8</encoding>

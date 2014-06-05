@@ -1,4 +1,11 @@
 *.class
+.project
+.classpath
+.settings
+.metadata
+output
+target
+activemq-data
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
