@@ -14,13 +14,13 @@ import javax.jms.Session;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.java.Log;
-import uworkers.api.Endpoint;
+import uworkers.api.EndpointConnection;
 import uworkers.utils.Fibonacci;
 
 @Log
 @Getter
 @Accessors( fluent = true )
-public abstract class AbstractEndpoint<T extends Session> implements ExceptionListener, Endpoint {
+public abstract class AbstractEndpointConnection<T extends Session> implements ExceptionListener, EndpointConnection {
 
 	private static final int TIME_TO_WAIT_BEFORE_START_LOGGING_ERROR = 10;
 	private static final int LESS_THAN_A_MINUTE = 50;
@@ -123,13 +123,7 @@ public abstract class AbstractEndpoint<T extends Session> implements ExceptionLi
 		return received.getObject();
 	}
 
-	MessageConsumer createMessageConsumer() {
-		try {
-			return currentSession().createConsumer( destination() );
-		} catch ( JMSException cause ) {
-			throw new RuntimeException( cause );
-		}
-	}
+	abstract MessageConsumer createMessageConsumer();
 
 	MessageProducer createMessageProducer() {
 		try {

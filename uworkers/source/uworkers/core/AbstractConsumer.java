@@ -2,12 +2,12 @@ package uworkers.core;
 
 import lombok.extern.java.Log;
 import uworkers.api.Consumer;
-import uworkers.api.Endpoint;
+import uworkers.api.EndpointConnection;
 
 @Log
 public abstract class AbstractConsumer<T> implements Runnable, Consumer<T> {
 
-	protected abstract Endpoint endpoint();
+	protected abstract EndpointConnection endpoint();
 
 	@Override
 	public void run() {

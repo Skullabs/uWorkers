@@ -10,7 +10,7 @@ import javax.jms.JMSException;
 import org.junit.Test;
 
 import trip.spi.Provided;
-import uworkers.api.Endpoint;
+import uworkers.api.EndpointConnection;
 import uworkers.api.Worker;
 import uworkers.api.WorkerService;
 import uworkers.core.endpoint.MQProvider;
@@ -22,7 +22,7 @@ public class AsyncEndpointConsumptionTest extends TestCase {
 	final CountDownLatch counter = new CountDownLatch( TOTAL_OF_MSGS );
 
 	@Provided MQProvider mqProvider;
-	@Provided @Worker( "worker.test" ) Endpoint worker;
+	@Provided @Worker( "worker.test" ) EndpointConnection worker;
 
 	@Override
 	public void setup() {

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.jms.JMSException;
 
-public interface Endpoint {
+public interface EndpointConnection {
 
 	void start() throws InterruptedException, JMSException;
 

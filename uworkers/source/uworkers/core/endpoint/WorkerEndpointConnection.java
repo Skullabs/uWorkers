@@ -1,6 +1,7 @@
 package uworkers.core.endpoint;
 
 import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueSession;
@@ -13,7 +14,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Accessors( fluent = true )
 @RequiredArgsConstructor
-public class WorkerEndpoint extends AbstractEndpoint<QueueSession> {
+public class WorkerEndpointConnection extends AbstractEndpointConnection<QueueSession> {
 
 	final String endpointName;
 	final MQProvider mqProvider;
@@ -25,5 +26,13 @@ public class WorkerEndpoint extends AbstractEndpoint<QueueSession> {
 		QueueSession session = connection.createQueueSession( false, Session.AUTO_ACKNOWLEDGE );
 		destination = session.createQueue( endpointName );
 		return new Connection<QueueSession>( connection, session );
+	}
+
+	MessageConsumer createMessageConsumer() {
+		try {
+			return currentSession().createConsumer( destination() );
+		} catch ( JMSException cause ) {
+			throw new RuntimeException( cause );
+		}
 	}
 }
