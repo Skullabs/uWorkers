@@ -13,6 +13,7 @@ import javax.jms.JMSException;
 
 import lombok.RequiredArgsConstructor;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import trip.spi.Name;
@@ -22,6 +23,7 @@ import uworkers.core.endpoint.MQProvider;
 import uworkers.core.endpoint.SubscriberEndpointConnection;
 import uworkers.core.endpoint.WorkerEndpointConnection;
 
+@Ignore
 public class EndpointConnectionTest extends TestCase {
 
 	static final String WORLD = "World";

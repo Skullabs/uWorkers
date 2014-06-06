@@ -8,8 +8,8 @@
 		<artifactId>uworkers-parent</artifactId>
 	</parent>
 
-	<artifactId>uworkers-processor</artifactId>
-	<name>micro Workers: Processor</name>
+	<artifactId>uworkers-integration-tests</artifactId>
+	<name>uWorkers: Integration Tests</name>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -18,21 +18,9 @@
 			<artifactId>uworkers</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.spullara.mustache.java</groupId>
-			<artifactId>compiler</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>uworkers-processor</artifactId>
 		</dependency>
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<inherited>true</inherited>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<proc>none</proc>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

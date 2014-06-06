@@ -45,6 +45,7 @@
 	<modules>
 		<module>uworkers</module>
 		<module>uworkers-processor</module>
+		<module>uworkers-integration-tests</module>
 	</modules>
 
 	<properties>
@@ -144,6 +145,12 @@
 				<groupId>${project.groupId}</groupId>
 				<version>${project.version}</version>
 				<artifactId>uworkers</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<version>${project.version}</version>
+				<artifactId>uworkers-processor</artifactId>
+				
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

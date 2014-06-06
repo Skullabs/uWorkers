@@ -53,6 +53,7 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 	public void startAndListenMessages() throws InterruptedException, JMSException {
 		start();
 		this.connection.start();
+		log.info( this.toString() + " started to receive messages.");
 	}
 
 	public void setupEndpoint() throws InterruptedException {
@@ -76,7 +77,7 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 	protected void tryConnect() throws JMSException {
 		stop();
 		connect();
-		log.fine( this.toString() + " connected to " + connection );
+		log.info( this.toString() + " connected to " + connection );
 	}
 
 	@Override
@@ -105,6 +106,7 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 		ObjectMessage message = currentSession.createObjectMessage();
 		message.setObject( object );
 		send( message );
+		log.info( object + " sent to " + this );
 	}
 
 	public void send( ObjectMessage message ) throws JMSException {
@@ -136,4 +138,9 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 	}
 
 	protected abstract Destination destination();
+	
+	@Override
+	public String toString() {
+		return "Endpoint( " + destination() + " )";
+	}
 }
