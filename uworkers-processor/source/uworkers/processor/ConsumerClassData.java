@@ -36,14 +36,13 @@ public class ConsumerClassData {
 		String provider = method.getEnclosingElement().asType().toString();
 		VariableElement variableElement = retrieveExpectedMessageTypeParameter(method);
 		String type = variableElement.asType().toString();
-		String typeName = variableElement.getSimpleName().toString();
 		return new ConsumerClassData(
 				provider.replace( "." + providerName, "" ),
 				extractNameFrom( element ),
 				provider,
 				provider.replace( ".", "Dot" ),
 				method.getSimpleName().toString(),
-				type, typeName);
+				type, stripPackageName(type) );
 	}
 
 	static VariableElement retrieveExpectedMessageTypeParameter(ExecutableElement method) {
@@ -68,5 +67,9 @@ public class ConsumerClassData {
 		if ( name == null )
 			return "";
 		return name.replaceAll("<[^>]*>", "");
+	}
+	
+	static String stripPackageName( String canonicalName ){
+		return canonicalName.replaceAll("^.*\\.([^\\.]+)", "$1");
 	}
 }

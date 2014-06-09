@@ -51,8 +51,8 @@ public class ConsumerClassProcessor extends AbstractProcessor {
 	@SuppressWarnings("unchecked")
 	Iterable<Element> retrieveMethodsAnnotatedWith( RoundEnvironment roundEnv, Class<? extends Annotation> annotation )
 			throws IOException {
-		return Filter.filter(
-				(Iterable<Element>)roundEnv.getElementsAnnotatedWith( annotation ),
+		return (Iterable<Element>)Filter.filter(
+				roundEnv.getElementsAnnotatedWith( annotation ),
 				new MethodsOnlyCondition() );
 	}
 
