@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 @Target( { ElementType.METHOD, ElementType.FIELD } )
 @Retention( RetentionPolicy.RUNTIME )
-public @interface Worker {
+public @interface Autostart {
 
-	String value() default "";
+	boolean value() default true;
 
 }

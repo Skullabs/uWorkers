@@ -22,10 +22,10 @@ public class UWorkerConfiguration implements Configuration {
 	public List<EndpointConsumerConfiguration> readEndpointConsumersConfiguration() {
 		List<EndpointConsumerConfiguration> consumers = new ArrayList<EndpointConsumerConfiguration>();
 		for ( Configuration endpoint : config.getConfigList("uworker.consumers") )
-			consumers.add( new EndpointConsumerConfiguration(endpoint, readProvider()) );
+			consumers.add( new DefaultEndpointConsumerConfiguration(endpoint) );
 		return consumers;
 	}
-	
+
 	public ProviderConfiguration readProvider() {
 		Configuration provider = config.getConfig("uworkers.provider");
 		return new ProviderConfiguration( provider );

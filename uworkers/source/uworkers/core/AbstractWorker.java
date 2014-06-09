@@ -11,9 +11,5 @@ public abstract class AbstractWorker<T> extends AbstractConsumer<T> {
 
 	@Getter( lazy = true ) private final WorkerEndpointConnection endpoint = new WorkerEndpointConnection( endpointName(), mqProvider() );
 
-	protected abstract String endpointName();
-
-	protected abstract AbstractWorker<T> endpointName( String endpointName );
-
 	protected abstract MQProvider mqProvider();
 }

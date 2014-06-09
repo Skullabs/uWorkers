@@ -1,28 +1,11 @@
 package uworkers.core.config;
 
-import lombok.Delegate;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+public interface EndpointConsumerConfiguration {
 
-@RequiredArgsConstructor
-public class EndpointConsumerConfiguration {
+	String getName();
 
-	@Delegate
-	final Configuration rootConfig;
-	final ProviderConfiguration defaultProviderConfig;
+	String getEndpoint();
 
-	@Getter( lazy=true )
-	private final String name = rootConfig.getString( "name", null );
+	Integer getNumberOfInstances();
 
-	@Getter( lazy=true )
-	private final String endpoint = rootConfig.getString( "endpoint", null );
-	
-	@Getter( lazy=true )
-	private final ProviderConfiguration provider = readProviderConfiguration();
-	
-	public ProviderConfiguration readProviderConfiguration() {
-		final Configuration config = rootConfig.getConfig("provider")
-				.withFallback( defaultProviderConfig );
-		return new ProviderConfiguration( config );
-	}
 }

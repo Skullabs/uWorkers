@@ -11,9 +11,5 @@ public abstract class AbstractSubscriber<T> extends AbstractConsumer<T> {
 
 	@Getter( lazy = true ) private final SubscriberEndpointConnection endpoint = new SubscriberEndpointConnection( endpointName(), mqProvider() );
 
-	protected abstract String endpointName();
-	
-	protected abstract AbstractSubscriber<T> endpointName( String endpointName );
-
 	protected abstract MQProvider mqProvider();
 }
