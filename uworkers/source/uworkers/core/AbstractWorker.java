@@ -13,5 +13,7 @@ public abstract class AbstractWorker<T> extends AbstractConsumer<T> {
 
 	protected abstract String endpointName();
 
+	protected abstract AbstractWorker<T> endpointName( String endpointName );
+
 	protected abstract MQProvider mqProvider();
 }

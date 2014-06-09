@@ -18,7 +18,7 @@ import uworkers.core.endpoint.MQProvider;
 public class AsyncEndpointConsumptionTest extends TestCase {
 
 	final static int TOTAL_OF_MSGS = 10;
-	final WorkerService service = new WorkerService();
+	final WorkerService service = WorkerService.newInstance();
 	final CountDownLatch counter = new CountDownLatch( TOTAL_OF_MSGS );
 
 	@Provided MQProvider mqProvider;

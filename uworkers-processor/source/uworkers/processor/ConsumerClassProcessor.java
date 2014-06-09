@@ -13,6 +13,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
 import trip.spi.helpers.filter.Filter;
+import uworkers.api.Subscriber;
 import uworkers.api.Worker;
 
 @SupportedAnnotationTypes( "uworkers.*" )
@@ -21,7 +22,8 @@ public class ConsumerClassProcessor extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		try {
-			generateWorkerClasses(roundEnv);
+			generateWorkerClasses( roundEnv );
+			generateSubscriberClasses( roundEnv );
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}
@@ -39,7 +41,7 @@ public class ConsumerClassProcessor extends AbstractProcessor {
 	}
 
 	void generateSubscriberClasses(RoundEnvironment roundEnv) throws IOException {
-		for ( Element methodElement : retrieveMethodsAnnotatedWith( roundEnv, Worker.class ) )
+		for ( Element methodElement : retrieveMethodsAnnotatedWith( roundEnv, Subscriber.class ) )
 			createAWorkerConsumerClassFrom( ConsumerClassData.from(methodElement) );
 	}
 

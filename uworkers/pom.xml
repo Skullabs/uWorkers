@@ -19,6 +19,10 @@
 			<artifactId>jboss-jms-api_1.1_spec</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.typesafe</groupId>
+			<artifactId>config</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>io.skullabs.trip</groupId>
 			<artifactId>trip-core</artifactId>
 		</dependency>

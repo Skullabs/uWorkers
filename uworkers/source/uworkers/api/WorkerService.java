@@ -3,21 +3,19 @@ package uworkers.api;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import trip.spi.Provided;
 import trip.spi.ServiceProvider;
 import trip.spi.ServiceProviderException;
+import uworkers.core.config.UWorkerConfiguration;
 
 @Log
-@NoArgsConstructor
 @RequiredArgsConstructor
 public class WorkerService {
 
 	final ExecutorService executor = Executors.newCachedThreadPool();
-	@Provided @NonNull ServiceProvider provider;
+	final UWorkerConfiguration workerConfiguration;
+	final ServiceProvider provider;
 
 	public void start() throws ServiceProviderException {
 		for ( Consumer<?> consumer : provider.loadAll( Consumer.class ) )
@@ -34,8 +32,18 @@ public class WorkerService {
 	}
 
 	public static WorkerService newInstance() {
-		WorkerService workerService = new WorkerService();
-		workerService.provider = new ServiceProvider();
-		return workerService;
+		final UWorkerConfiguration workerConfiguration = UWorkerConfiguration.load();
+		return newInstance(workerConfiguration);
+	}
+
+	public static WorkerService newInstance( String rootConfiguration ) {
+		UWorkerConfiguration workerConfiguration = UWorkerConfiguration.load( rootConfiguration );
+		return newInstance(workerConfiguration);
+	}
+
+	private static WorkerService newInstance(
+			final UWorkerConfiguration workerConfiguration) {
+		final ServiceProvider serviceProvider = new ServiceProvider();
+		return new WorkerService( workerConfiguration, serviceProvider );
 	}
 }

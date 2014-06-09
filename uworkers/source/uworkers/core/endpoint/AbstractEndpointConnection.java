@@ -106,7 +106,6 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 		ObjectMessage message = currentSession.createObjectMessage();
 		message.setObject( object );
 		send( message );
-		log.info( object + " sent to " + this );
 	}
 
 	public void send( ObjectMessage message ) throws JMSException {
