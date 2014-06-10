@@ -4,12 +4,12 @@
 
 	<parent>
 		<groupId>io.uworkers</groupId>
-		<version>0.1</version>
+		<version>0.1-SNAPSHOT</version>
 		<artifactId>uworkers-parent</artifactId>
 	</parent>
 
-	<artifactId>uworkers-processor</artifactId>
-	<name>micro Workers: Processor</name>
+	<artifactId>uworkers-integration-tests</artifactId>
+	<name>uWorkers: Integration Tests</name>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -17,22 +17,21 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>uworkers</artifactId>
 		</dependency>
+		<!-- Provided Libraries -->
 		<dependency>
-			<groupId>com.github.spullara.mustache.java</groupId>
-			<artifactId>compiler</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>uworkers-processor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.skullabs.trip</groupId>
+			<artifactId>trip-processor</artifactId>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<inherited>true</inherited>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<proc>none</proc>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>
