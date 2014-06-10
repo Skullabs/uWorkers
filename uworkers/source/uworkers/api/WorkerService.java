@@ -53,7 +53,7 @@ public class WorkerService {
 	}
 
 	public void tryStartConsumerClass( Class<Consumer> consumerClass, EndpointConsumerConfiguration configuration )
-			throws WorkerException {
+			throws WorkerException, ServiceProviderException {
 		for ( int i=0; i<configuration.getNumberOfInstances(); i++ )
 			start( instantiate( consumerClass, configuration ) );
 	}
@@ -62,15 +62,18 @@ public class WorkerService {
 			EndpointConsumerConfiguration configuration) throws WorkerException {
 		try {
 			final Consumer consumer = consumerClass.newInstance();
-			consumer.endpointName( configuration.getEndpoint() );
+			final String endpointName = configuration.getEndpoint();
+			if ( endpointName != null )
+				consumer.endpointName( endpointName );
 			return consumer;
 		} catch (  InstantiationException | IllegalAccessException cause ) {
 			throw new WorkerException(cause);
 		}
 	}
 
-	public void start( Consumer consumer ) {
+	public void start( Consumer consumer ) throws ServiceProviderException {
 		log.info( "Deploying consumer: " + consumer );
+		provider.provideOn(consumer);
 		executor.submit( consumer );
 	}
 

@@ -109,6 +109,7 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 	}
 
 	public void send( ObjectMessage message ) throws JMSException {
+//		log.info( "Sending " + message );
 		producer().send( message );
 	}
 

@@ -8,6 +8,7 @@ import javax.jms.TopicConnection;
 import javax.jms.TopicSession;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -16,7 +17,7 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 public class SubscriberEndpointConnection extends AbstractEndpointConnection<TopicSession> {
 
-	final String endpointName;
+	@NonNull String endpointName;
 	final MQProvider mqProvider;
 	Topic destination;
 

@@ -7,6 +7,8 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
 
 import trip.spi.Name;
+import uworkers.api.Subscriber;
+import uworkers.api.Worker;
 
 public class ConsumerClassData {
 
@@ -17,10 +19,11 @@ public class ConsumerClassData {
 	final String consumerMethod;
 	final String type;
 	final String typeName;
+	final String endpointName;
 
 	public ConsumerClassData(String packageName, String name, String consumer,
 			String consumerName, String consumerMethod, String type,
-			String typeName) {
+			String typeName, String endpointName ) {
 		this.packageName = stripGenericsFrom( packageName );
 		this.name = stripGenericsFrom( name );
 		this.consumer = stripGenericsFrom( consumer );
@@ -28,6 +31,7 @@ public class ConsumerClassData {
 		this.consumerMethod = stripGenericsFrom( consumerMethod );
 		this.type = stripGenericsFrom( type );
 		this.typeName = stripGenericsFrom( typeName );
+		this.endpointName = endpointName;
 	}
 
 	public static ConsumerClassData from( Element element ) {
@@ -42,7 +46,18 @@ public class ConsumerClassData {
 				provider,
 				provider.replace( ".", "Dot" ),
 				method.getSimpleName().toString(),
-				type, stripPackageName(type) );
+				type, stripPackageName(type),
+				extractEndpointNameFrom( method ));
+	}
+
+	static String extractEndpointNameFrom(ExecutableElement method) {
+		Worker worker = method.getAnnotation( Worker.class );
+		if ( worker != null )
+			return worker.value();
+		Subscriber subscriber = method.getAnnotation( Subscriber.class );
+		if ( subscriber != null )
+			return subscriber.value();
+		throw new IllegalStateException( "Unknown endpoint name for " + method.getSimpleName().toString() );
 	}
 
 	static VariableElement retrieveExpectedMessageTypeParameter(ExecutableElement method) {

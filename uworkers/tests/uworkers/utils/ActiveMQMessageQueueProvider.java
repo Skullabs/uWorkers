@@ -20,7 +20,6 @@ import uworkers.core.endpoint.MQProvider;
 public class ActiveMQMessageQueueProvider implements MQProvider {
 
 	final String url = "vm://127.0.0.1";
-//	final String url = "tcp://192.168.100.41:61616";
 	final ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory( url );
 
 	@Override

@@ -8,6 +8,7 @@ import javax.jms.QueueSession;
 import javax.jms.Session;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -16,7 +17,7 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 public class WorkerEndpointConnection extends AbstractEndpointConnection<QueueSession> {
 
-	final String endpointName;
+	@NonNull String endpointName;
 	final MQProvider mqProvider;
 	Queue destination;
 

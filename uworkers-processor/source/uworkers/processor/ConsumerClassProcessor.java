@@ -42,7 +42,7 @@ public class ConsumerClassProcessor extends AbstractProcessor {
 
 	void generateSubscriberClasses(RoundEnvironment roundEnv) throws IOException {
 		for ( Element methodElement : retrieveMethodsAnnotatedWith( roundEnv, Subscriber.class ) )
-			createAWorkerConsumerClassFrom( ConsumerClassData.from(methodElement) );
+			createASubscriberConsumerClassFrom( ConsumerClassData.from(methodElement) );
 	}
 
 	void createASubscriberConsumerClassFrom( ConsumerClassData clazz ) throws IOException {

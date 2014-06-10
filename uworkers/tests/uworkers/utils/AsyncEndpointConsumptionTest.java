@@ -10,6 +10,7 @@ import javax.jms.JMSException;
 import org.junit.Test;
 
 import trip.spi.Provided;
+import trip.spi.ServiceProviderException;
 import uworkers.api.EndpointConnection;
 import uworkers.api.Worker;
 import uworkers.api.WorkerService;
@@ -25,7 +26,7 @@ public class AsyncEndpointConsumptionTest extends TestCase {
 	@Provided @Worker( "worker.test" ) EndpointConnection worker;
 
 	@Override
-	public void setup() {
+	public void setup() throws ServiceProviderException {
 		assertThat( mqProvider, notNullValue() );
 		HelloWorker helloWorker = new HelloWorker( "worker.test", mqProvider, counter );
 		service.start( helloWorker );
