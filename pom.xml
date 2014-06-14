@@ -64,7 +64,7 @@
 		<version.maven.plugin>2.3.2</version.maven.plugin>
 		<version.assembly.plugin>2.2.1</version.assembly.plugin>
 		<version.jar.plugin>2.4</version.jar.plugin>
-		<version.build.helper.plugin>1.9</version.build.helper.plugin>
+		<version.build.helper.plugin>1.8</version.build.helper.plugin>
 		<version.jacoco.plugin>0.5.7.201204190339</version.jacoco.plugin>
 	</properties>
 
