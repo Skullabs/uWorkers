@@ -10,12 +10,10 @@ import lombok.experimental.Accessors;
 import lombok.extern.java.Log;
 import trip.spi.ServiceProvider;
 import trip.spi.ServiceProviderException;
-import trip.spi.helpers.filter.Filter;
 import uworkers.core.config.EndpointConsumerConfiguration;
-import uworkers.core.config.FixedEndpointConsumerConfiguration;
+import uworkers.core.config.Endpoints;
 import uworkers.core.config.UWorkerConfiguration;
 import uworkers.utils.AnnotatedClasses;
-import uworkers.utils.EndpointNamed;
 
 @Log
 @Getter
@@ -32,24 +30,13 @@ public class WorkerService {
 		final Iterable<Class<Consumer>> consumerClasses = loadConsumerClasses();
 		final List<EndpointConsumerConfiguration> consumerConfigs = workerConfiguration.getEndpointConsumers();
 		for ( Class<Consumer> consumerClass : consumerClasses ){
-			final EndpointConsumerConfiguration configuration = retrieveConfigForConsumer(consumerClass, consumerConfigs);
+			final EndpointConsumerConfiguration configuration = Endpoints.retrieveConfigForConsumer(consumerClass, consumerConfigs);
 			tryStartConsumerClass(consumerClass, configuration);
 		}
 	}
 
 	private Iterable<Class<Consumer>> loadConsumerClasses() {
 		return provider.loadClassesImplementing( Consumer.class, AnnotatedClasses.with( Autostart.class ) );
-	}
-
-	public EndpointConsumerConfiguration retrieveConfigForConsumer(
-			Class<Consumer> consumerClass, List<EndpointConsumerConfiguration> consumerConfigs )
-	{
-		final EndpointConsumerConfiguration configuration = FixedEndpointConsumerConfiguration.from(consumerClass);
-		EndpointConsumerConfiguration configForConsumer = 
-				Filter.first( consumerConfigs, EndpointNamed.with( configuration.getName() ) );
-		if ( configForConsumer == null )
-			configForConsumer = configuration;
-		return configForConsumer;
 	}
 
 	public void tryStartConsumerClass( Class<Consumer> consumerClass, EndpointConsumerConfiguration configuration )
@@ -62,9 +49,7 @@ public class WorkerService {
 			EndpointConsumerConfiguration configuration) throws WorkerException {
 		try {
 			final Consumer consumer = consumerClass.newInstance();
-			final String endpointName = configuration.getEndpoint();
-			if ( endpointName != null )
-				consumer.endpointName( endpointName );
+			consumer.endpointName( configuration.getEndpoint() );
 			return consumer;
 		} catch (  InstantiationException | IllegalAccessException cause ) {
 			throw new WorkerException(cause);
@@ -94,6 +79,7 @@ public class WorkerService {
 	private static WorkerService newInstance(
 			final UWorkerConfiguration workerConfiguration) {
 		final ServiceProvider serviceProvider = new ServiceProvider();
+		serviceProvider.providerFor( UWorkerConfiguration.class, workerConfiguration );
 		return new WorkerService( workerConfiguration, serviceProvider );
 	}
 }
