@@ -6,7 +6,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
 
-import trip.spi.Name;
 import uworkers.api.Subscriber;
 import uworkers.api.Worker;
 
@@ -52,11 +51,11 @@ public class ConsumerClassData {
 
 	static String extractEndpointNameFrom(ExecutableElement method) {
 		Worker worker = method.getAnnotation( Worker.class );
-		if ( worker != null )
-			return worker.value();
+		if ( worker != null && !worker.queue().isEmpty() )
+			return worker.queue();
 		Subscriber subscriber = method.getAnnotation( Subscriber.class );
-		if ( subscriber != null )
-			return subscriber.value();
+		if ( subscriber != null && subscriber.topic().isEmpty() )
+			return subscriber.topic();
 		throw new IllegalStateException( "Unknown endpoint name for " + method.getSimpleName().toString() );
 	}
 
@@ -72,9 +71,12 @@ public class ConsumerClassData {
 	}
 
 	static String extractNameFrom( Element element ) {
-		Name name = element.getAnnotation( Name.class );
-		if ( name != null )
-			return name.value();
+		Worker worker = element.getAnnotation( Worker.class );
+		if ( worker != null && !worker.name().isEmpty() )
+			return worker.name();
+		Subscriber subscriber = element.getAnnotation( Subscriber.class );
+		if ( subscriber != null && !subscriber.name().isEmpty() )
+			return subscriber.name();
 		return null;
 	}
 

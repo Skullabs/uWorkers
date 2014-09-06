@@ -25,7 +25,7 @@ import uworkers.tests.PingPongConsumers.Pong;
 public class WorkerServiceTest {
 
 	@Provided
-	@Worker( "pingpong.ping" )
+	@Worker( name = "pingpong.ping" )
 	EndpointConnection pong;
 
 	final WorkerService workerService = WorkerService.newInstance();
@@ -38,7 +38,7 @@ public class WorkerServiceTest {
 		workerService.start();
 	}
 
-	@Test( timeout=10000 )
+	@Test
 	public void grantThatTriedToAutoInstantiatePingPongConsumersAsExpected() throws Exception {
 		workerService.start( new PongReceiver() );
 		pong.send( new Ping() );
@@ -61,6 +61,11 @@ public class WorkerServiceTest {
 		@Override
 		public String toString() {
 			return "The Pong Receiver( " + endpointName + " )";
+		}
+
+		@Override
+		public Class<Pong> getExpectedObjectClass() {
+			return Pong.class;
 		}
 	}
 }

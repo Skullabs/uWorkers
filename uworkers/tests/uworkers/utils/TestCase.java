@@ -8,15 +8,19 @@ import org.junit.After;
 import org.junit.Before;
 
 import trip.spi.ServiceProvider;
+import uworkers.core.config.UWorkerConfiguration;
 
 @Getter
 @Accessors( fluent = true )
 public class TestCase {
 
 	final ServiceProvider provider = new ServiceProvider();
+	final UWorkerConfiguration workerConfiguration = UWorkerConfiguration.load();
+	
 
 	@Before
 	public void provideMyDependencies() throws Exception {
+		provider.providerFor( UWorkerConfiguration.class, workerConfiguration );
 		provider.provideOn( this );
 		setup();
 	}

@@ -26,6 +26,10 @@
 			<groupId>io.skullabs.trip</groupId>
 			<artifactId>trip-core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
 		<!-- Provided Libraries -->
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
@@ -36,6 +40,11 @@
 			<groupId>io.skullabs.trip</groupId>
 			<artifactId>trip-processor</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

@@ -19,7 +19,7 @@ public class UWorkerConfigurationTest {
 	public void ensureThatUWorkerConfigurationWorksAsExpected(){
 		UWorkerConfiguration configuration = UWorkerConfiguration.load();
 		List<EndpointConsumerConfiguration> consumers = configuration.getEndpointConsumers();
-		assertThat( consumers.size(), is( 2 ) );
+		assertThat( consumers.size(), is( 3 ) );
 		EndpointConsumerConfiguration first = consumers.get(0);
 		assertTrue( first.getEndpoint().startsWith("pingpong.") );
 		assertNotNull( first.getName() );

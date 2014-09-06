@@ -1,5 +1,6 @@
 package uworkers.core.endpoint;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import javax.jms.DeliveryMode;
@@ -10,12 +11,15 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
+import javax.jms.TextMessage;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.java.Log;
 import uworkers.api.EndpointConnection;
 import uworkers.utils.Fibonacci;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Log
 @Getter
@@ -25,6 +29,8 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 	private static final int TIME_TO_WAIT_BEFORE_START_LOGGING_ERROR = 10;
 	private static final int LESS_THAN_A_MINUTE = 50;
 	private static final int SECONDS = 1000;
+	
+	private static final ObjectMapper mapper = new ObjectMapper();
 
 	@Getter( lazy = true ) private final MessageConsumer consumer = createMessageConsumer();
 	@Getter( lazy = true ) private final MessageProducer producer = createMessageProducer();
@@ -102,27 +108,35 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 	}
 
 	@Override
-	public void send( Serializable object ) throws JMSException {
-		ObjectMessage message = currentSession.createObjectMessage();
-		message.setObject( object );
-		send( message );
-	}
-
-	public void send( ObjectMessage message ) throws JMSException {
-//		log.info( "Sending " + message );
+	public void send( Object object ) throws JMSException, IOException {
+		TextMessage  message = currentSession.createTextMessage();
+		String jsonString = serialize(object);
+		message.setText( jsonString );
 		producer().send( message );
 	}
-
-	@Override
-	@SuppressWarnings( "unchecked" )
-	public <V extends Serializable> V receive( Class<V> target ) throws JMSException {
-		return (V)receive();
+	
+	public String serialize(Object object) throws IOException {
+		try {
+			return mapper.writeValueAsString( object );
+		} catch (IOException cause) {
+			throw new IOException(cause);
+		}
 	}
-
+	
 	@Override
-	public Object receive() throws JMSException {
-		ObjectMessage received = (ObjectMessage)consumer().receive();
-		return received.getObject();
+	public <V> V receive( Class<V> target ) throws JMSException, IOException {
+		TextMessage received = (TextMessage)consumer().receive();
+		String jsonString = received.getText();
+		V unserialize = unserialize(jsonString, target);
+		return unserialize;
+	}
+	
+	public <T> T unserialize(String input, Class<T> targetClass) throws IOException {
+		try {
+			return mapper.readValue( input, targetClass);
+		} catch ( IOException cause ) {
+			throw new IOException(cause);
+		}
 	}
 
 	abstract MessageConsumer createMessageConsumer();

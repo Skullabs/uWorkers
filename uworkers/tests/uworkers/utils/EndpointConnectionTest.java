@@ -3,6 +3,7 @@ package uworkers.utils;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -13,17 +14,15 @@ import javax.jms.JMSException;
 
 import lombok.RequiredArgsConstructor;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-import trip.spi.Name;
 import trip.spi.Provided;
 import uworkers.api.EndpointConnection;
 import uworkers.core.endpoint.MQProvider;
 import uworkers.core.endpoint.SubscriberEndpointConnection;
 import uworkers.core.endpoint.WorkerEndpointConnection;
 
-@Ignore
+
 public class EndpointConnectionTest extends TestCase {
 
 	static final String WORLD = "World";
@@ -31,11 +30,10 @@ public class EndpointConnectionTest extends TestCase {
 	final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
 	@Provided
-	@Name( "activemq-test" )
 	MQProvider mqProvider;
 
-	@Test(timeout=10000)
-	public void grantThatSendAndReceiveDataFromWorkerEndpoint() throws JMSException, InterruptedException {
+	@Test
+	public void grantThatSendAndReceiveDataFromWorkerEndpoint() throws JMSException, InterruptedException, IOException {
 		WorkerEndpointConnection endpoint = new WorkerEndpointConnection( "TEST.QUEUE.ENDPOINT", mqProvider );
 		try {
 			endpoint.startAndListenMessages();
@@ -47,8 +45,8 @@ public class EndpointConnectionTest extends TestCase {
 		}
 	}
 
-	@Test(timeout=10000)
-	public void grantThatSendAndReceiveDataFromSubscriberEndpoint() throws JMSException, InterruptedException, ExecutionException {
+	@Test
+	public void grantThatSendAndReceiveDataFromSubscriberEndpoint() throws JMSException, InterruptedException, ExecutionException, IOException {
 		SubscriberEndpointConnection endpoint = new SubscriberEndpointConnection( "TEST.TOPIC.ENDPOINT", mqProvider );
 		try {
 			endpoint.startAndListenMessages();

@@ -10,16 +10,17 @@ import lombok.experimental.Accessors;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-import trip.spi.Service;
+import trip.spi.Singleton;
 import uworkers.core.endpoint.MQProvider;
 
-@Service
+
 @Getter
 @Accessors( fluent = true )
 @NoArgsConstructor
+@Singleton( exposedAs = MQProvider.class)
 public class ActiveMQMessageQueueProvider implements MQProvider {
 
-	final String url = "vm://127.0.0.1";
+	final String url = "vm://localhost";
 	final ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory( url );
 
 	@Override

@@ -20,7 +20,7 @@ public class WorkerEndpointConnection extends AbstractEndpointConnection<QueueSe
 	@NonNull String endpointName;
 	final MQProvider mqProvider;
 	Queue destination;
-
+	
 	@Override
 	public Connection<QueueSession> createConnection() throws JMSException {
 		QueueConnection connection = mqProvider().createWorkerConnection();

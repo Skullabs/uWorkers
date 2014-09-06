@@ -10,8 +10,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import trip.spi.Service;
+import trip.spi.Singleton;
 import uworkers.api.Consumer;
+import uworkers.api.Worker;
 import uworkers.api.WorkerException;
 import uworkers.core.AbstractWorker;
 import uworkers.core.endpoint.MQProvider;
@@ -20,7 +21,8 @@ import uworkers.core.endpoint.MQProvider;
 @Setter
 @Accessors( fluent = true )
 @RequiredArgsConstructor
-@Service( Consumer.class )
+@Singleton( exposedAs = Consumer.class, name = "helloWorker" )
+@Worker( name = "test.worker" , queue = "test.worker")
 public class HelloWorker extends AbstractWorker<Hello> {
 
 	@NonNull String endpointName;
@@ -31,5 +33,10 @@ public class HelloWorker extends AbstractWorker<Hello> {
 	public void handle( Hello receivedMessage ) throws WorkerException {
 		assertThat( receivedMessage.getWorld(), is( "WORLD" ) );
 		counter.countDown();
+	}
+
+	@Override
+	public Class<Hello> getExpectedObjectClass() {
+		return Hello.class;
 	}
 }

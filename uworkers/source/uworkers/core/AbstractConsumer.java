@@ -1,5 +1,9 @@
 package uworkers.core;
 
+import java.io.IOException;
+
+import javax.jms.JMSException;
+
 import lombok.extern.java.Log;
 import uworkers.api.Consumer;
 import uworkers.api.EndpointConnection;
@@ -28,12 +32,18 @@ public abstract class AbstractConsumer<T> implements Runnable, Consumer<T> {
 	@SuppressWarnings( "unchecked" )
 	protected void receiveAndHandleMessage() throws InterruptedException {
 		try {
-			T receivedMessage = (T)endpoint().receive();
+			T receivedMessage = receive();
 			handle( receivedMessage );
 		} catch ( Throwable cause ) {
 			handleFailure( cause );
 		}
 	}
+	
+	protected T receive() throws JMSException, IOException {
+	  return (T)endpoint().receive( getExpectedObjectClass() );
+	}
+	
+	public abstract Class<T> getExpectedObjectClass();
 
 	protected void handleFailure( Throwable cause ) {
 		log.severe( cause.getMessage() );

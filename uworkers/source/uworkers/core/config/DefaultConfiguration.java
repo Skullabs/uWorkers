@@ -7,7 +7,7 @@ import lombok.Delegate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import trip.spi.Service;
+import trip.spi.Singleton;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException.Missing;
@@ -17,7 +17,7 @@ import com.typesafe.config.ConfigException.Missing;
  * helpful methods to deal with configuration parameters.
  */
 @Log
-@Service
+@Singleton( exposedAs = Configuration.class)
 @RequiredArgsConstructor
 public class DefaultConfiguration implements Configuration {
 

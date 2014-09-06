@@ -1,5 +1,6 @@
 package uworkers.api;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import javax.jms.JMSException;
@@ -14,10 +15,8 @@ public interface EndpointConnection {
 
 	void stop();
 
-	void send( Serializable object ) throws JMSException;
+	void send( Object object ) throws JMSException, IOException;
 
-	<T extends Serializable> T receive( Class<T> target ) throws JMSException;
-
-	Object receive() throws JMSException;
+	<T> T receive( Class<T> target ) throws JMSException, IOException;
 
 }
