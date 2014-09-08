@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import javax.jms.JMSException;
 
+import lombok.Getter;
 import lombok.extern.java.Log;
 import trip.spi.Provided;
 import uworkers.api.EndpointConnection;
@@ -15,7 +16,7 @@ import uworkers.api.Worker;
 public class PingPongConsumers {
 
 	@Provided
-	@Subscriber( name = "pingpong.pong",topic = "pingpong.pong" )
+	@Subscriber( name = "pingpong.pong", topic = "pingpong.pong" )
 	EndpointConnection pong;
 
 	@Provided
@@ -36,11 +37,15 @@ public class PingPongConsumers {
 		pongResp.send( pong );
 	}
 
+	@Getter
 	public static class Ping implements Serializable {
 		private static final long serialVersionUID = 361031655746891547l;
+		String something;
 	}
 
+	@Getter
 	public static class Pong implements Serializable {
 		private static final long serialVersionUID = 733280201722704996L;
+		String something;
 	}
 }

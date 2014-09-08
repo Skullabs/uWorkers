@@ -18,10 +18,10 @@ public class Endpoints {
 		val subscriber = targetConsumer.getAnnotation(Subscriber.class);
 		if ( subscriber != null && !subscriber.name().isEmpty() )
 			return subscriber.name();
-		throw new IllegalStateException("Missing @Worker or @Subscriber annotation on consumer class.");
+		throw new IllegalStateException( "Missing @Worker or @Subscriber annotation on consumer class "
+			+ targetConsumer.getCanonicalName() );
 	}
-	
-	//TODO: testar isso aqui
+
 	public static String extractQueueOrTopicNameFromConsumer(final Class<?> targetConsumer) {
 		val worker = targetConsumer.getAnnotation(Worker.class);
 		if ( worker != null && !worker.queue().isEmpty() )

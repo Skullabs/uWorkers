@@ -43,20 +43,41 @@ public class ConsumerClassData {
 				provider.replace( "." + providerName, "" ),
 				extractNameFrom( element ),
 				provider,
-				provider.replace( ".", "Dot" ),
+				provider.replace( ".", "" ),
 				method.getSimpleName().toString(),
 				type, stripPackageName(type),
 				extractEndpointNameFrom( method ));
 	}
 
-	static String extractEndpointNameFrom(ExecutableElement method) {
-		Worker worker = method.getAnnotation( Worker.class );
-		if ( worker != null && !worker.queue().isEmpty() )
-			return worker.queue();
-		Subscriber subscriber = method.getAnnotation( Subscriber.class );
-		if ( subscriber != null && subscriber.topic().isEmpty() )
-			return subscriber.topic();
-		throw new IllegalStateException( "Unknown endpoint name for " + method.getSimpleName().toString() );
+	static String extractEndpointNameFrom( final ExecutableElement method ) {
+		String endpointName = extractWorkerEndpointNameFrom( method );
+		if ( endpointName == null )
+			endpointName = extractSubscriberEndpointNameFrom( method );
+		if ( endpointName == null ) {
+			final String type = method.getEnclosingElement().asType().toString();
+			throw new IllegalStateException( "Unknown endpoint name for " + type + "." + method.getSimpleName().toString() );
+		}
+		return endpointName;
+	}
+
+	static String extractWorkerEndpointNameFrom( ExecutableElement method ) {
+		final Worker worker = method.getAnnotation( Worker.class );
+		if ( worker != null ) {
+			if ( !worker.queue().isEmpty() )
+				return worker.queue();
+			return worker.name();
+		}
+		return null;
+	}
+
+	static String extractSubscriberEndpointNameFrom( ExecutableElement method ) {
+		final Subscriber subscriber = method.getAnnotation( Subscriber.class );
+		if ( subscriber != null ) {
+			if ( !subscriber.topic().isEmpty() )
+				return subscriber.topic();
+			return subscriber.name();
+		}
+		return null;
 	}
 
 	static VariableElement retrieveExpectedMessageTypeParameter(ExecutableElement method) {
