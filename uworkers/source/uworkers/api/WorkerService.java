@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.java.Log;
 import trip.spi.ServiceProvider;
 import trip.spi.ServiceProviderException;
+import trip.spi.helpers.filter.Condition;
 import uworkers.core.config.EndpointConsumerConfiguration;
 import uworkers.core.config.Endpoints;
 import uworkers.core.config.UWorkerConfiguration;
@@ -35,8 +36,9 @@ public class WorkerService {
 		}
 	}
 
+	@SuppressWarnings( "unchecked" )
 	private Iterable<Class<Consumer>> loadConsumerClasses() {
-		return provider.loadClassesImplementing( Consumer.class, AnnotatedClasses.with( Autostart.class ) );
+		return provider.loadClassesImplementing( Consumer.class, (Condition)AnnotatedClasses.with( Autostart.class ) );
 	}
 
 	public void tryStartConsumerClass( Class<Consumer> consumerClass, EndpointConsumerConfiguration configuration )

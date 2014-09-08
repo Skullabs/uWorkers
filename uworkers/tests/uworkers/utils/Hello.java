@@ -15,6 +15,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class Hello implements Serializable {
 	
-	private static long serialVersionUID = -7785227681110925365L;
+	private static final long serialVersionUID = -8438930878608545944L;
 	public String world;
 }

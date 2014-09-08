@@ -1,7 +1,6 @@
 package uworkers.api;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 import javax.jms.JMSException;
 

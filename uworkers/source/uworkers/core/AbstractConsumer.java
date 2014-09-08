@@ -29,7 +29,6 @@ public abstract class AbstractConsumer<T> implements Runnable, Consumer<T> {
 		}
 	}
 
-	@SuppressWarnings( "unchecked" )
 	protected void receiveAndHandleMessage() throws InterruptedException {
 		try {
 			T receivedMessage = receive();
@@ -40,7 +39,7 @@ public abstract class AbstractConsumer<T> implements Runnable, Consumer<T> {
 	}
 	
 	protected T receive() throws JMSException, IOException {
-	  return (T)endpoint().receive( getExpectedObjectClass() );
+	  return endpoint().receive( getExpectedObjectClass() );
 	}
 	
 	public abstract Class<T> getExpectedObjectClass();

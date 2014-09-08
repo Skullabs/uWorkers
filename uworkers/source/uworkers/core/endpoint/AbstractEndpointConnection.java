@@ -1,7 +1,6 @@
 package uworkers.core.endpoint;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 import javax.jms.DeliveryMode;
 import javax.jms.Destination;
@@ -9,7 +8,6 @@ import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
-import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
@@ -130,8 +128,8 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 		V unserialize = unserialize(jsonString, target);
 		return unserialize;
 	}
-	
-	public <T> T unserialize(String input, Class<T> targetClass) throws IOException {
+
+	public <V> V unserialize( String input, Class<V> targetClass ) throws IOException {
 		try {
 			return mapper.readValue( input, targetClass);
 		} catch ( IOException cause ) {

@@ -1,8 +1,8 @@
 package uworkers.core.config;
 
-import lombok.Delegate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Delegate;
 
 @RequiredArgsConstructor
 public class DefaultEndpointConsumerConfiguration implements EndpointConsumerConfiguration {

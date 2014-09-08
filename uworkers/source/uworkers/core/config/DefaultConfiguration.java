@@ -3,9 +3,9 @@ package uworkers.core.config;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Delegate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Delegate;
 import lombok.extern.java.Log;
 import trip.spi.Singleton;
 

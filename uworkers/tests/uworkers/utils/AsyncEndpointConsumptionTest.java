@@ -4,12 +4,9 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.concurrent.CountDownLatch;
 
 import javax.jms.JMSException;
-
-import lombok.val;
 
 import org.junit.Test;
 
@@ -19,15 +16,6 @@ import uworkers.api.EndpointConnection;
 import uworkers.api.Worker;
 import uworkers.api.WorkerService;
 import uworkers.core.endpoint.MQProvider;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 
 public class AsyncEndpointConsumptionTest extends TestCase {
 
@@ -52,18 +40,4 @@ public class AsyncEndpointConsumptionTest extends TestCase {
 			worker.send( new Hello( "WORLD" ) );
 		counter.await();
 	}
-	/*
-	@Test
-	public void testJson() throws IOException{
-		ObjectMapper mapper = new ObjectMapper();
-		Hello h = new Hello("World");		
-		val s =  mapper.writeValueAsString( h );
-		try{
-		val j = mapper.readValue( s, Hello.class);
-		System.out.println(j.toString());
-		}catch(Exception e){
-			System.err.println(e.getMessage());
-		}
-		
-	}*/
 }
