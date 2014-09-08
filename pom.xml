@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>io.uworkers</groupId>
-	<version>0.1</version>
+	<version>0.2</version>
 	<artifactId>uworkers-parent</artifactId>
 	<name>micro Workers</name>
 	<packaging>pom</packaging>
@@ -22,7 +22,25 @@
 			<email>miere.teixeira@gmail.com</email>
 			<name>Miere Liniel Teixeira</name>
 		</developer>
+		<developer>
+			<id>cesar</id>
+			<email>cesar.selonke@gmail.com</email>
+			<name>Cesar Henrique Selonke</name>
+		</developer>
 	</developers>
+
+	<distributionManagement>
+		<repository>
+			<id>skullabs-release-repository</id>
+			<name>Release Repository</name>
+			<url>http://skullabs.io:8081/content/repositories/PublicRelease/</url>
+		</repository>
+		<snapshotRepository>
+			<id>skullabs-snapshot-repository</id>
+			<name>Snapshot Repository</name>
+			<url>http://skullabs.io:8081/content/repositories/PublicSnapshot/</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<repositories>
 		<repository>
@@ -36,9 +54,18 @@
 			</snapshots>
 		</repository>
 		<repository>
-			<id>release-repository</id>
+			<id>skullabs-release-repository</id>
 			<name>Release Repository</name>
 			<url>http://skullabs.io:8081/content/repositories/PublicRelease/</url>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>false</enabled></snapshots>
+		</repository>
+		<repository>
+			<id>skullabs-snapshot-repository</id>
+			<name>Snapshot Repository</name>
+			<url>http://skullabs.io:8081/content/repositories/PublicSnapshot/</url>
+			<releases><enabled>false</enabled></releases>
+			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
 	</repositories>
 
