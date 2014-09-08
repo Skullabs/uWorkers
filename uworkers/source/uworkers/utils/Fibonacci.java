@@ -26,7 +26,7 @@ public class Fibonacci implements Iterable<Integer>, Iterator<Integer> {
 
 	@Override
 	public Integer next() {
-		int sum = last + current;
+		final int sum = last + current;
 		last = current;
 		current = sum;
 		return sum;

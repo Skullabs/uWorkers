@@ -20,23 +20,23 @@ public class UWorkerConfiguration implements Configuration {
 	private final List<EndpointConsumerConfiguration> endpointConsumers = readEndpointConsumersConfiguration();
 
 	public List<EndpointConsumerConfiguration> readEndpointConsumersConfiguration() {
-		List<EndpointConsumerConfiguration> consumers = new ArrayList<EndpointConsumerConfiguration>();
-		for ( Configuration endpoint : config.getConfigList("uworker.consumers") )
+		final List<EndpointConsumerConfiguration> consumers = new ArrayList<EndpointConsumerConfiguration>();
+		for ( final Configuration endpoint : config.getConfigList( "uworker.consumers" ) )
 			consumers.add( new DefaultEndpointConsumerConfiguration(endpoint) );
 		return consumers;
 	}
 
 	public ProviderConfiguration readProvider() {
-		Configuration provider = config.getConfig("uworkers.provider");
+		final Configuration provider = config.getConfig( "uworkers.provider" );
 		return new ProviderConfiguration( provider );
 	}
 
 	public static UWorkerConfiguration load() {
-		Configuration config = new DefaultConfiguration( loadDefaultConfig() );
+		final Configuration config = new DefaultConfiguration( loadDefaultConfig() );
 		return new UWorkerConfiguration(config);
 	}
 
-	public static UWorkerConfiguration load( String root ) {
+	public static UWorkerConfiguration load( final String root ) {
 		final Config defaultConfig = loadDefaultConfig();
 		final Config newRootConfig = ConfigFactory.load("META-INF/uworkers")
 			.getConfig(root).withFallback(defaultConfig);

@@ -25,7 +25,7 @@ public class DefaultConfiguration implements Configuration {
 	@Delegate( excludes=NotImplementedConfigMethods.class )
 	final Config mergeableConfig;
 
-	public String getString( String name, String defaultValue ) {
+	public String getString( final String name, final String defaultValue ) {
 		try {
 			return mergeableConfig.getString(name);
 		} catch ( Missing cause ) {
@@ -33,7 +33,7 @@ public class DefaultConfiguration implements Configuration {
 		}
 	}
 
-	public Integer getInt( String name, Integer defaultValue ) {
+	public Integer getInt( final String name, final Integer defaultValue ) {
 		try {
 			return mergeableConfig.getInt(name);
 		} catch ( Missing cause ) {
@@ -41,7 +41,7 @@ public class DefaultConfiguration implements Configuration {
 		}
 	}
 	
-	public Configuration getConfig( String name ) {
+	public Configuration getConfig( final String name ) {
 		try {
 			return new DefaultConfiguration( mergeableConfig.getConfig(name) );
 		} catch ( Missing cause ) {
@@ -49,8 +49,8 @@ public class DefaultConfiguration implements Configuration {
 		}
 	}
 
-	public List<Configuration> getConfigList( String name ) {
-		List<Configuration> newConfigList = new ArrayList<Configuration>();
+	public List<Configuration> getConfigList( final String name ) {
+		final List<Configuration> newConfigList = new ArrayList<Configuration>();
 		try {
 			for ( Config config : this.mergeableConfig.getConfigList(name) )
 				newConfigList.add( new DefaultConfiguration(config) );
@@ -60,8 +60,8 @@ public class DefaultConfiguration implements Configuration {
 		return newConfigList;
 	}
 
-	public Configuration withFallback( Configuration mergeableConfig ) {
-		Config mergedConfig = this.mergeableConfig.withFallback( mergeableConfig.getMergeableConfig() );
+	public Configuration withFallback( final Configuration mergeableConfig ) {
+		final Config mergedConfig = this.mergeableConfig.withFallback( mergeableConfig.getMergeableConfig() );
 		return new DefaultConfiguration( mergedConfig );
 	}
 

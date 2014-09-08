@@ -16,7 +16,7 @@ public class FixedEndpointConsumerConfiguration implements EndpointConsumerConfi
 	@NonNull
 	String endpoint;
 
-	public static EndpointConsumerConfiguration from( Class<?> targetConsumer ) {
+	public static EndpointConsumerConfiguration from( final Class<?> targetConsumer ) {
 		final String name = Endpoints.extractNameFromConsumer(targetConsumer);
 		String queueOrTopicName = Endpoints.extractQueueOrTopicNameFromConsumer(targetConsumer);
 		if ( queueOrTopicName == null )

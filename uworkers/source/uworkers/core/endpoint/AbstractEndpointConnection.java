@@ -28,7 +28,7 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 	private static final int LESS_THAN_A_MINUTE = 50;
 	private static final int SECONDS = 1000;
 	
-	private static final ObjectMapper mapper = new ObjectMapper();
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	@Getter( lazy = true ) private final MessageConsumer consumer = createMessageConsumer();
 	@Getter( lazy = true ) private final MessageProducer producer = createMessageProducer();

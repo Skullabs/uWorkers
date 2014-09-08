@@ -10,7 +10,7 @@ public class EndpointNamed implements Condition<EndpointConsumerConfiguration> {
 	final String name;
 
 	@Override
-	public boolean check(EndpointConsumerConfiguration object) {
+	public boolean check( final EndpointConsumerConfiguration object ) {
 		return name.equals( object.getName() );
 	}
 }

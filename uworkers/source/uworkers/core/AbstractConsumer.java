@@ -19,9 +19,9 @@ public abstract class AbstractConsumer<T> implements Runnable, Consumer<T> {
 			endpoint().startAndListenMessages();
 			while ( true )
 				receiveAndHandleMessage();
-		} catch ( InterruptedException cause ) {
+		} catch ( final InterruptedException cause ) {
 			log.info( "Stopping consumer " + this );
-		} catch ( Throwable cause ) {
+		} catch ( final Throwable cause ) {
 			handleFailure( cause );
 		} finally {
 			endpoint().stop();
@@ -31,9 +31,9 @@ public abstract class AbstractConsumer<T> implements Runnable, Consumer<T> {
 
 	protected void receiveAndHandleMessage() throws InterruptedException {
 		try {
-			T receivedMessage = receive();
+			final T receivedMessage = receive();
 			handle( receivedMessage );
-		} catch ( Throwable cause ) {
+		} catch ( final Throwable cause ) {
 			handleFailure( cause );
 		}
 	}
@@ -44,7 +44,7 @@ public abstract class AbstractConsumer<T> implements Runnable, Consumer<T> {
 	
 	public abstract Class<T> getExpectedObjectClass();
 
-	protected void handleFailure( Throwable cause ) {
+	protected void handleFailure( final Throwable cause ) {
 		log.severe( cause.getMessage() );
 		cause.printStackTrace();
 	}

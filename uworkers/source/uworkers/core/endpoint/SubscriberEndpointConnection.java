@@ -23,16 +23,17 @@ public class SubscriberEndpointConnection extends AbstractEndpointConnection<Top
 
 	@Override
 	public Connection<TopicSession> createConnection() throws JMSException {
-		TopicConnection connection = mqProvider().createSubscriptionConnection();
-		TopicSession session = connection.createTopicSession( false, Session.AUTO_ACKNOWLEDGE );
+		final TopicConnection connection = mqProvider().createSubscriptionConnection();
+		final TopicSession session = connection.createTopicSession( false, Session.AUTO_ACKNOWLEDGE );
 		destination = session.createTopic( endpointName );
 		return new Connection<TopicSession>( connection, session );
 	}
 
+	@Override
 	MessageConsumer createMessageConsumer() {
 		try {
-			return ((TopicSession)currentSession()).createSubscriber( destination() );
-		} catch ( JMSException cause ) {
+			return currentSession().createSubscriber( destination() );
+		} catch ( final JMSException cause ) {
 			throw new RuntimeException( cause );
 		}
 	}

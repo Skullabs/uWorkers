@@ -23,16 +23,17 @@ public class WorkerEndpointConnection extends AbstractEndpointConnection<QueueSe
 	
 	@Override
 	public Connection<QueueSession> createConnection() throws JMSException {
-		QueueConnection connection = mqProvider().createWorkerConnection();
-		QueueSession session = connection.createQueueSession( false, Session.AUTO_ACKNOWLEDGE );
+		final QueueConnection connection = mqProvider().createWorkerConnection();
+		final QueueSession session = connection.createQueueSession( false, Session.AUTO_ACKNOWLEDGE );
 		destination = session.createQueue( endpointName );
 		return new Connection<QueueSession>( connection, session );
 	}
 
+	@Override
 	MessageConsumer createMessageConsumer() {
 		try {
 			return currentSession().createConsumer( destination() );
-		} catch ( JMSException cause ) {
+		} catch ( final JMSException cause ) {
 			throw new RuntimeException( cause );
 		}
 	}
