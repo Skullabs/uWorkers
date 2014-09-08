@@ -50,7 +50,8 @@ public class EndpointConnectionTest extends TestCase {
 		SubscriberEndpointConnection endpoint = new SubscriberEndpointConnection( "TEST.TOPIC.ENDPOINT", mqProvider );
 		try {
 			endpoint.startAndListenMessages();
-			Future<String> world = executor.submit( new ReceivableHello(endpoint) );
+			Future<String> world = executor.submit( new ReceivableHello( endpoint ) );
+			Thread.sleep( 1000 );
 			endpoint.send( new Hello( WORLD ) );
 			assertThat( world.get(), is( WORLD ) );
 		} finally {
