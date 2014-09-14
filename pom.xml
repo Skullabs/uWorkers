@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>io.uworkers</groupId>
-	<version>0.2</version>
+	<version>0.3</version>
 	<artifactId>uworkers-parent</artifactId>
 	<name>micro Workers</name>
 	<packaging>pom</packaging>
@@ -81,7 +81,7 @@
 		<version.junit>4.10</version.junit>
 		<version.lombok>1.14.4</version.lombok>
 		<version.mockito>1.9.5</version.mockito>
-		<version.trip>1.1.0</version.trip>
+		<version.trip>1.1.1</version.trip>
 		<version.config>1.2.0</version.config>
 		<version.mustache>0.8.14</version.mustache>
 		<version.jboss.jee>1.0.1.Final</version.jboss.jee>
