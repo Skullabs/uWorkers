@@ -8,11 +8,13 @@ import javax.jms.JMSException;
 import lombok.Getter;
 import lombok.extern.java.Log;
 import trip.spi.Provided;
+import trip.spi.Singleton;
 import uworkers.api.EndpointConnection;
 import uworkers.api.Subscriber;
 import uworkers.api.Worker;
 
 @Log
+@Singleton
 public class PingPongConsumers {
 
 	@Provided
@@ -24,14 +26,14 @@ public class PingPongConsumers {
 	EndpointConnection pongResp;
 
 	@Worker( queue = "ping", name = "ping" )
-	public void receivePing( Ping ping ) throws JMSException, IOException {
+	public void receivePing( final Ping ping ) throws JMSException, IOException {
 		log.info( "Received ping." );
 		log.fine( ping.toString() );
 		pong.send( new Pong() );
 	}
 
 	@Subscriber( topic = "pong", name = "pong" )
-	public void receivePong( Pong pong ) throws JMSException, IOException {
+	public void receivePong( final Pong pong ) throws JMSException, IOException {
 		log.info( "Received pong." );
 		log.fine( pong.toString() );
 		pongResp.send( pong );

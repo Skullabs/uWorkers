@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 
+import trip.spi.inject.SingletonImplementation;
 import uworkers.api.Subscriber;
 import uworkers.api.Worker;
 
@@ -19,10 +21,11 @@ public class ConsumerClassData {
 	final String type;
 	final String typeName;
 	final String endpointName;
+	final String exposedAs;
 
-	public ConsumerClassData(String packageName, String name, String consumer,
-			String consumerName, String consumerMethod, String type,
-			String typeName, String endpointName ) {
+	public ConsumerClassData(final String packageName, final String name, final String consumer,
+			final String consumerName, final String consumerMethod, final String type,
+		final String typeName, final String endpointName, final String exposedAs ) {
 		this.packageName = stripGenericsFrom( packageName );
 		this.name = stripGenericsFrom( name );
 		this.consumer = stripGenericsFrom( consumer );
@@ -31,14 +34,16 @@ public class ConsumerClassData {
 		this.type = stripGenericsFrom( type );
 		this.typeName = stripGenericsFrom( typeName );
 		this.endpointName = endpointName;
+		this.exposedAs = exposedAs;
 	}
 
-	public static ConsumerClassData from( Element element ) {
-		ExecutableElement method = assertElementIsMethod( element );
-		String providerName = method.getEnclosingElement().getSimpleName().toString();
-		String provider = method.getEnclosingElement().asType().toString();
-		VariableElement variableElement = retrieveExpectedMessageTypeParameter(method);
-		String type = variableElement.asType().toString();
+	public static ConsumerClassData from( final Element element ) {
+		final ExecutableElement method = assertElementIsMethod( element );
+		final TypeElement typeElement = (TypeElement)method.getEnclosingElement();
+		final String providerName = typeElement.getSimpleName().toString();
+		final String provider = typeElement.asType().toString();
+		final VariableElement variableElement = retrieveExpectedMessageTypeParameter(method);
+		final String type = variableElement.asType().toString();
 		return new ConsumerClassData(
 				provider.replace( "." + providerName, "" ),
 				extractNameFrom( element ),
@@ -46,7 +51,8 @@ public class ConsumerClassData {
 				provider.replace( ".", "" ),
 				method.getSimpleName().toString(),
 				type, stripPackageName(type),
-				extractEndpointNameFrom( method ));
+				extractEndpointNameFrom( method ),
+				SingletonImplementation.getProvidedServiceClassAsString( typeElement ) );
 	}
 
 	static String extractEndpointNameFrom( final ExecutableElement method ) {
@@ -60,7 +66,7 @@ public class ConsumerClassData {
 		return endpointName;
 	}
 
-	static String extractWorkerEndpointNameFrom( ExecutableElement method ) {
+	static String extractWorkerEndpointNameFrom( final ExecutableElement method ) {
 		final Worker worker = method.getAnnotation( Worker.class );
 		if ( worker != null ) {
 			if ( !worker.queue().isEmpty() )
@@ -70,7 +76,7 @@ public class ConsumerClassData {
 		return null;
 	}
 
-	static String extractSubscriberEndpointNameFrom( ExecutableElement method ) {
+	static String extractSubscriberEndpointNameFrom( final ExecutableElement method ) {
 		final Subscriber subscriber = method.getAnnotation( Subscriber.class );
 		if ( subscriber != null ) {
 			if ( !subscriber.topic().isEmpty() )
@@ -80,34 +86,34 @@ public class ConsumerClassData {
 		return null;
 	}
 
-	static VariableElement retrieveExpectedMessageTypeParameter(ExecutableElement method) {
-		List<? extends VariableElement> parameters = method.getParameters();
+	static VariableElement retrieveExpectedMessageTypeParameter(final ExecutableElement method) {
+		final List<? extends VariableElement> parameters = method.getParameters();
 		if ( parameters.size() != 1 )
 			throw new IllegalStateException("Consumer method should have exactly one parameter.");
 		return parameters.get(0);
 	}
 
-	static ExecutableElement assertElementIsMethod( Element element ) {
+	static ExecutableElement assertElementIsMethod( final Element element ) {
 		return (ExecutableElement)element;
 	}
 
-	static String extractNameFrom( Element element ) {
-		Worker worker = element.getAnnotation( Worker.class );
+	static String extractNameFrom( final Element element ) {
+		final Worker worker = element.getAnnotation( Worker.class );
 		if ( worker != null && !worker.name().isEmpty() )
 			return worker.name();
-		Subscriber subscriber = element.getAnnotation( Subscriber.class );
+		final Subscriber subscriber = element.getAnnotation( Subscriber.class );
 		if ( subscriber != null && !subscriber.name().isEmpty() )
 			return subscriber.name();
 		return null;
 	}
 
-	static String stripGenericsFrom( String name ) {
+	static String stripGenericsFrom( final String name ) {
 		if ( name == null )
 			return "";
 		return name.replaceAll("<[^>]*>", "");
 	}
-	
-	static String stripPackageName( String canonicalName ){
+
+	static String stripPackageName( final String canonicalName ){
 		return canonicalName.replaceAll("^.*\\.([^\\.]+)", "$1");
 	}
 }
