@@ -30,7 +30,7 @@ public class WorkerService {
 	public void start() throws ServiceProviderException, WorkerException {
 		final Iterable<Class<Consumer>> consumerClasses = loadConsumerClasses();
 		final List<EndpointConsumerConfiguration> consumerConfigs = workerConfiguration.getEndpointConsumers();
-		for ( Class<Consumer> consumerClass : consumerClasses ){
+		for ( final Class<Consumer> consumerClass : consumerClasses ){
 			final EndpointConsumerConfiguration configuration = Endpoints.retrieveConfigForConsumer(consumerClass, consumerConfigs);
 			tryStartConsumerClass(consumerClass, configuration);
 		}
@@ -41,16 +41,17 @@ public class WorkerService {
 		return provider.loadClassesImplementing( Consumer.class, (Condition)AnnotatedClasses.with( Autostart.class ) );
 	}
 
-	public void tryStartConsumerClass( Class<Consumer> consumerClass, EndpointConsumerConfiguration configuration )
+	public void tryStartConsumerClass( final Class<Consumer> consumerClass, final EndpointConsumerConfiguration configuration )
 			throws WorkerException, ServiceProviderException {
 		for ( int i=0; i<configuration.getNumberOfInstances(); i++ )
 			start( instantiate( consumerClass, configuration ) );
 	}
 
-	public Consumer instantiate(Class<Consumer> consumerClass,
-			EndpointConsumerConfiguration configuration) throws WorkerException {
+	public Consumer instantiate(final Class<Consumer> consumerClass,
+			final EndpointConsumerConfiguration configuration) throws WorkerException {
 		try {
 			final Consumer consumer = consumerClass.newInstance();
+			// FIXME: doesn't apply to stateless services
 			consumer.endpointName( configuration.getEndpoint() );
 			return consumer;
 		} catch (  InstantiationException | IllegalAccessException cause ) {
@@ -58,7 +59,7 @@ public class WorkerService {
 		}
 	}
 
-	public void start( Consumer consumer ) throws ServiceProviderException {
+	public void start( final Consumer consumer ) throws ServiceProviderException {
 		log.info( "Deploying consumer: " + consumer );
 		provider.provideOn(consumer);
 		executor.submit( consumer );
@@ -73,7 +74,7 @@ public class WorkerService {
 		return newInstance(workerConfiguration);
 	}
 
-	public static WorkerService newInstance( String rootConfiguration ) {
+	public static WorkerService newInstance( final String rootConfiguration ) {
 		final UWorkerConfiguration workerConfiguration = UWorkerConfiguration.load( rootConfiguration );
 		return newInstance(workerConfiguration);
 	}
