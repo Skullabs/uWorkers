@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 import trip.spi.Singleton;
 import uworkers.api.Consumer;
 import uworkers.api.Worker;
-import uworkers.api.WorkerException;
+import uworkers.api.UWorkerException;
 import uworkers.core.AbstractWorker;
 import uworkers.core.endpoint.MQProvider;
 
@@ -30,7 +30,7 @@ public class HelloWorker extends AbstractWorker<Hello> {
 	final CountDownLatch counter;
 
 	@Override
-	public void handle( Hello receivedMessage ) throws WorkerException {
+	public void handle( Hello receivedMessage ) throws UWorkerException {
 		assertThat( receivedMessage.getWorld(), is( "WORLD" ) );
 		counter.countDown();
 	}

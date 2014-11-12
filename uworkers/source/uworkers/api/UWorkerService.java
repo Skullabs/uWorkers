@@ -21,13 +21,13 @@ import uworkers.utils.AnnotatedClasses;
 @Accessors( fluent=true )
 @RequiredArgsConstructor
 @SuppressWarnings("rawtypes")
-public class WorkerService {
+public class UWorkerService {
 
 	final ExecutorService executor = Executors.newCachedThreadPool();
 	final UWorkerConfiguration workerConfiguration;
 	final ServiceProvider provider;
 
-	public void start() throws ServiceProviderException, WorkerException {
+	public void start() throws ServiceProviderException, UWorkerException {
 		final Iterable<Class<Consumer>> consumerClasses = loadConsumerClasses();
 		final List<EndpointConsumerConfiguration> consumerConfigs = workerConfiguration.getEndpointConsumers();
 		for ( final Class<Consumer> consumerClass : consumerClasses ){
@@ -42,20 +42,20 @@ public class WorkerService {
 	}
 
 	public void tryStartConsumerClass( final Class<Consumer> consumerClass, final EndpointConsumerConfiguration configuration )
-			throws WorkerException, ServiceProviderException {
+			throws UWorkerException, ServiceProviderException {
 		for ( int i=0; i<configuration.getNumberOfInstances(); i++ )
 			start( instantiate( consumerClass, configuration ) );
 	}
 
 	public Consumer instantiate(final Class<Consumer> consumerClass,
-			final EndpointConsumerConfiguration configuration) throws WorkerException {
+			final EndpointConsumerConfiguration configuration) throws UWorkerException {
 		try {
 			final Consumer consumer = consumerClass.newInstance();
 			// FIXME: doesn't apply to stateless services
 			consumer.endpointName( configuration.getEndpoint() );
 			return consumer;
 		} catch (  InstantiationException | IllegalAccessException cause ) {
-			throw new WorkerException(cause);
+			throw new UWorkerException(cause);
 		}
 	}
 
@@ -69,20 +69,20 @@ public class WorkerService {
 		executor.shutdownNow();
 	}
 
-	public static WorkerService newInstance() {
+	public static UWorkerService newInstance() {
 		final UWorkerConfiguration workerConfiguration = UWorkerConfiguration.load();
 		return newInstance(workerConfiguration);
 	}
 
-	public static WorkerService newInstance( final String rootConfiguration ) {
+	public static UWorkerService newInstance( final String rootConfiguration ) {
 		final UWorkerConfiguration workerConfiguration = UWorkerConfiguration.load( rootConfiguration );
 		return newInstance(workerConfiguration);
 	}
 
-	private static WorkerService newInstance(
+	private static UWorkerService newInstance(
 			final UWorkerConfiguration workerConfiguration) {
 		final ServiceProvider serviceProvider = new ServiceProvider();
 		serviceProvider.providerFor( UWorkerConfiguration.class, workerConfiguration );
-		return new WorkerService( workerConfiguration, serviceProvider );
+		return new UWorkerService( workerConfiguration, serviceProvider );
 	}
 }

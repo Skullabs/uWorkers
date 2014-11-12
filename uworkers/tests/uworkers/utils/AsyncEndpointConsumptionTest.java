@@ -14,13 +14,13 @@ import trip.spi.Provided;
 import trip.spi.ServiceProviderException;
 import uworkers.api.EndpointConnection;
 import uworkers.api.Worker;
-import uworkers.api.WorkerService;
+import uworkers.api.UWorkerService;
 import uworkers.core.endpoint.MQProvider;
 
 public class AsyncEndpointConsumptionTest extends TestCase {
 
 	final static int TOTAL_OF_MSGS = 10;
-	final WorkerService service = WorkerService.newInstance();
+	final UWorkerService service = UWorkerService.newInstance();
 	final CountDownLatch counter = new CountDownLatch( TOTAL_OF_MSGS );
 
 	@Provided MQProvider mqProvider;

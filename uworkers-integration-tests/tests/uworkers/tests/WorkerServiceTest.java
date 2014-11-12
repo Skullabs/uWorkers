@@ -15,8 +15,8 @@ import trip.spi.ServiceProvider;
 import trip.spi.ServiceProviderException;
 import uworkers.api.EndpointConnection;
 import uworkers.api.Worker;
-import uworkers.api.WorkerException;
-import uworkers.api.WorkerService;
+import uworkers.api.UWorkerException;
+import uworkers.api.UWorkerService;
 import uworkers.core.AbstractSubscriber;
 import uworkers.core.endpoint.MQProvider;
 import uworkers.tests.PingPongConsumers.Ping;
@@ -28,11 +28,11 @@ public class WorkerServiceTest {
 	@Worker( name = "pingpong.ping" )
 	EndpointConnection pong;
 
-	final WorkerService workerService = WorkerService.newInstance();
+	final UWorkerService workerService = UWorkerService.newInstance();
 	final CountDownLatch counter = new CountDownLatch(1);
 	
 	@Before
-	public void setup() throws ServiceProviderException, WorkerException{
+	public void setup() throws ServiceProviderException, UWorkerException{
 		final ServiceProvider provider = workerService.provider();
 		provider.provideOn(this);
 		workerService.start();
@@ -54,7 +54,7 @@ public class WorkerServiceTest {
 		@Provided MQProvider mqProvider;
 
 		@Override
-		public void handle(Pong receivedMessage) throws WorkerException, InterruptedException {
+		public void handle(Pong receivedMessage) throws UWorkerException, InterruptedException {
 			counter.countDown();
 		}
 		
