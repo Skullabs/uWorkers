@@ -4,7 +4,7 @@
 
 	<parent>
 		<groupId>io.uworkers</groupId>
-		<version>0.4.0</version>
+		<version>0.4.1</version>
 		<artifactId>uworkers-parent</artifactId>
 	</parent>
 
