@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>io.uworkers</groupId>
+		<groupId>io.skullabs.uworkers</groupId>
 		<version>0.4.1</version>
 		<artifactId>uworkers-parent</artifactId>
 	</parent>
@@ -23,10 +23,6 @@
 			<artifactId>config</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.skullabs.trip</groupId>
-			<artifactId>trip-core</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
@@ -34,11 +30,6 @@
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-core</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.skullabs.trip</groupId>
-			<artifactId>trip-processor</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

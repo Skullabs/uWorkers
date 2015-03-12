@@ -3,6 +3,7 @@
 .classpath
 .settings
 .metadata
+*.versionsBackup
 output
 target
 activemq-data

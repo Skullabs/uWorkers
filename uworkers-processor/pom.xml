@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>io.uworkers</groupId>
+		<groupId>io.skullabs.uworkers</groupId>
 		<version>0.4.1</version>
 		<artifactId>uworkers-parent</artifactId>
 	</parent>
