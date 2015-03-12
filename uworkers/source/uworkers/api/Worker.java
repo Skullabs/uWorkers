@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 @Target( { ElementType.METHOD, ElementType.FIELD, ElementType.TYPE } )
 @Retention( RetentionPolicy.RUNTIME )
 public @interface Worker {
+	boolean serialized() default true;
 	String queue() default "";
 	String name();
 }

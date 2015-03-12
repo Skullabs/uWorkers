@@ -14,8 +14,11 @@ public interface EndpointConnection {
 
 	void stop();
 
-	void send( Object object ) throws JMSException, IOException;
+	void send(Object object) throws JMSException, IOException;
 
-	<T> T receive( Class<T> target ) throws JMSException, IOException;
+	<T> T receive(Class<T> target) throws JMSException, IOException;
 
+	boolean shouldSerializeBeforeSendOrReceiveObjects();
+
+	void shouldSerializeBeforeSendOrReceiveObjects(boolean shouldSerializeBeforeSendOrReceiveObjects);
 }

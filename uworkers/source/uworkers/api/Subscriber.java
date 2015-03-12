@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 @Target( { ElementType.METHOD, ElementType.FIELD, ElementType.TYPE } )
 @Retention( RetentionPolicy.RUNTIME )
 public @interface Subscriber {
+	boolean serialized() default true;
 	String topic() default "";
 	String name();
 }
