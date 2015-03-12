@@ -5,11 +5,11 @@
 	<parent>
 		<groupId>io.skullabs.trip</groupId>
 		<artifactId>trip-project</artifactId>
-		<version>1.2.3</version>
+		<version>1.2.4</version>
 	</parent>
 
 	<groupId>io.skullabs.uworkers</groupId>
-	<version>0.4.1</version>
+	<version>0.4.2-SNAPSHOT</version>
 	<artifactId>uworkers-parent</artifactId>
 	<name>micro Workers</name>
 	<packaging>pom</packaging>
