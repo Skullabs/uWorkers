@@ -4,19 +4,24 @@ import java.util.Iterator;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor( staticName = "until" )
+@RequiredArgsConstructor(staticName = "until")
 public class Fibonacci implements Iterable<Integer>, Iterator<Integer> {
 
 	int last;
+
 	int current;
 
 	final int limit;
 
 	@Override
 	public Iterator<Integer> iterator() {
+		reset();
+		return this;
+	}
+
+	public void reset() {
 		last = 0;
 		current = 1;
-		return this;
 	}
 
 	@Override

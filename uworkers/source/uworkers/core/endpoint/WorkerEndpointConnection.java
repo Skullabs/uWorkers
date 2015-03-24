@@ -13,28 +13,31 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Getter
-@Accessors( fluent = true )
+@Accessors(fluent = true)
 @RequiredArgsConstructor
 public class WorkerEndpointConnection extends AbstractEndpointConnection<QueueSession> {
 
-	@NonNull String endpointName;
+	@NonNull
+	String endpointName;
+
 	final MQProvider mqProvider;
+
 	Queue destination;
-	
+
 	@Override
 	public Connection<QueueSession> createConnection() throws JMSException {
 		final QueueConnection connection = mqProvider().createWorkerConnection();
-		final QueueSession session = connection.createQueueSession( false, Session.AUTO_ACKNOWLEDGE );
-		destination = session.createQueue( endpointName );
-		return new Connection<QueueSession>( connection, session );
+		final QueueSession session = connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+		destination = session.createQueue(endpointName);
+		return new Connection<QueueSession>(connection, session);
 	}
 
 	@Override
 	MessageConsumer createMessageConsumer() {
 		try {
-			return currentSession().createConsumer( destination() );
-		} catch ( final JMSException cause ) {
-			throw new RuntimeException( cause );
+			return currentSession().createConsumer(destination());
+		} catch (final JMSException cause) {
+			throw new RuntimeException(cause);
 		}
 	}
 }

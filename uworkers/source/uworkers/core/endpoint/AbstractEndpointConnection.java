@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.ExceptionListener;
+import javax.jms.IllegalStateException;
 import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
@@ -25,24 +26,42 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class AbstractEndpointConnection<T extends Session> implements ExceptionListener, EndpointConnection {
 
 	private static final int TIME_TO_WAIT_BEFORE_START_LOGGING_ERROR = 10;
-
 	private static final int LESS_THAN_A_MINUTE = 50;
-
 	private static final int SECONDS = 1000;
 
 	private final ObjectMapper mapper = new ObjectMapper();
+	boolean shouldSerializeBeforeSendOrReceiveObjects = true;
+	boolean isListeningMessages = false;
 
-	@Getter(lazy = true)
-	private final MessageConsumer consumer = createMessageConsumer();
-
-	@Getter(lazy = true)
-	private final MessageProducer producer = createMessageProducer();
-
+	MessageConsumer consumer;
+	MessageProducer producer;
 	javax.jms.Connection connection;
-
 	T currentSession;
 
-	boolean shouldSerializeBeforeSendOrReceiveObjects = true;
+	public MessageConsumer consumer() throws JMSException {
+		ensureSessionStarted();
+		if (consumer == null)
+			synchronized (this) {
+				if (consumer == null)
+					consumer = createMessageConsumer();
+			}
+		return consumer;
+	}
+
+	public MessageProducer producer() throws JMSException {
+		ensureSessionStarted();
+		if (producer == null)
+			synchronized (this) {
+				if (producer == null)
+					producer = createMessageProducer();
+			}
+		return producer;
+	}
+
+	void ensureSessionStarted() throws JMSException {
+		if (currentSession == null)
+			throw new IllegalStateException("Connection not configured/started.");
+	}
 
 	@Override
 	public void onException(JMSException exception) {
@@ -65,6 +84,7 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 	public void startAndListenMessages() throws InterruptedException, JMSException {
 		start();
 		this.connection.start();
+		isListeningMessages = true;
 		log.info(this.toString() + " started to receive messages.");
 	}
 
@@ -89,6 +109,8 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 	protected void tryConnect() throws JMSException {
 		stop();
 		connect();
+		if (isListeningMessages)
+			this.connection.start();
 		log.info(this.toString() + " connected to " + connection);
 	}
 
@@ -104,6 +126,23 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 
 	@Override
 	public void stop() {
+		closeSession();
+		closeConnection();
+		consumer = null;
+		producer = null;
+	}
+
+	void closeSession() {
+		try {
+			if (currentSession != null)
+				currentSession.close();
+			currentSession = null;
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
+	}
+
+	void closeConnection() {
 		try {
 			if (connection != null)
 				connection.close();
@@ -139,6 +178,14 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 		String jsonString = received.getText();
 		V unserialize = unserialize(jsonString, target);
 		return unserialize;
+	}
+
+	@Override
+	public <V> AcknowledgeableResponse<V> receiveAcknowledgeableResponse(Class<V> target) throws JMSException, IOException {
+		TextMessage received = (TextMessage) consumer().receive();
+		String jsonString = received.getText();
+		V unserialize = unserialize(jsonString, target);
+		return new AcknowledgeableResponse<>(unserialize, received);
 	}
 
 	@SuppressWarnings("unchecked")
