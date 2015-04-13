@@ -27,7 +27,7 @@ public class WorkerEndpointConnection extends AbstractEndpointConnection<QueueSe
 	@Override
 	public Connection<QueueSession> createConnection() throws JMSException {
 		final QueueConnection connection = mqProvider().createWorkerConnection();
-		final QueueSession session = connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+		final QueueSession session = connection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
 		destination = session.createQueue(endpointName);
 		return new Connection<QueueSession>(connection, session);
 	}

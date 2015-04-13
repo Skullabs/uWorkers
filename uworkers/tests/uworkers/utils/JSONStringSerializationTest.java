@@ -53,6 +53,7 @@ public class JSONStringSerializationTest extends TestCase {
 	@Test(timeout = 10000)
 	@SneakyThrows
 	public void ensureThatCanSendStringAndReceiveTheSameUnserializedString() {
+		Thread.sleep(1000l);
 		consumer.startAndListenMessages();
 		consumer.shouldSerializeBeforeSendOrReceiveObjects(false);
 		consumer.send(STRING);
