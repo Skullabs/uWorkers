@@ -4,12 +4,17 @@ import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.TextMessage;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @RequiredArgsConstructor
 public class ParametrizedRequest {
 
-	final TextMessage message;
+	@NonNull TextMessage message;
 	final MessageProducer producer;
 	
 	public ParametrizedRequest setCorrelationId( String id ) throws JMSException {
@@ -21,8 +26,9 @@ public class ParametrizedRequest {
 		message.setJMSMessageID(id);
 		return this;
 	}
-	
-	public void send() throws JMSException {
+
+	public TextMessage send() throws JMSException {
 		producer.send(message);
+		return message;
 	}
 }
