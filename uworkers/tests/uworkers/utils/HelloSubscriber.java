@@ -22,7 +22,7 @@ import uworkers.core.endpoint.MQProvider;
 @Accessors( fluent = true )
 @RequiredArgsConstructor
 @Singleton( exposedAs = Consumer.class, name = "helloSubscriber" )
-@Subscriber( name = "test.subscriber", topic = "test.subscriber")
+@Subscriber( name = "test.subscriber")
 public class HelloSubscriber extends AbstractSubscriber<Hello> {
 
 	@NonNull String endpointName;

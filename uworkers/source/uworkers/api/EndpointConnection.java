@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import javax.jms.JMSException;
 
-import uworkers.core.endpoint.AcknowledgeableResponse;
+import uworkers.core.endpoint.ParametrizedResponse;
+import uworkers.core.endpoint.ParametrizedRequest;
 
 public interface EndpointConnection {
 
@@ -24,6 +25,8 @@ public interface EndpointConnection {
 
 	void shouldSerializeBeforeSendOrReceiveObjects(boolean shouldSerializeBeforeSendOrReceiveObjects);
 
-	<V> AcknowledgeableResponse<V> receiveAcknowledgeableResponse(Class<V> target)
+	<V> ParametrizedResponse<V> receiveParametrizedResponse(Class<V> target)
 			throws JMSException, IOException;
+
+	ParametrizedRequest sendWithParameters(Object object) throws JMSException, IOException;
 }

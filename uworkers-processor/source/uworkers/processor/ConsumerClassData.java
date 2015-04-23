@@ -81,21 +81,15 @@ public class ConsumerClassData {
 
 	static String extractWorkerEndpointNameFrom(final ExecutableElement method) {
 		final Worker worker = method.getAnnotation(Worker.class);
-		if (worker != null) {
-			if (!worker.queue().isEmpty())
-				return worker.queue();
+		if (worker != null)
 			return worker.name();
-		}
 		return null;
 	}
 
 	static String extractSubscriberEndpointNameFrom(final ExecutableElement method) {
 		final Subscriber subscriber = method.getAnnotation(Subscriber.class);
-		if (subscriber != null) {
-			if (!subscriber.topic().isEmpty())
-				return subscriber.topic();
+		if (subscriber != null)
 			return subscriber.name();
-		}
 		return null;
 	}
 

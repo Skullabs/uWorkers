@@ -22,7 +22,7 @@ import uworkers.core.endpoint.MQProvider;
 @Accessors( fluent = true )
 @RequiredArgsConstructor
 @Singleton( exposedAs = Consumer.class, name = "helloWorker" )
-@Worker( name = "test.worker" , queue = "test.worker")
+@Worker( name = "test.worker" )
 public class HelloWorker extends AbstractWorker<Hello> {
 
 	@NonNull String endpointName;

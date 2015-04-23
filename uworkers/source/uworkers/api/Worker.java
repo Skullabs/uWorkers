@@ -9,6 +9,5 @@ import java.lang.annotation.Target;
 @Retention( RetentionPolicy.RUNTIME )
 public @interface Worker {
 	boolean serialized() default true;
-	String queue() default "";
 	String name();
 }

@@ -9,6 +9,5 @@ import java.lang.annotation.Target;
 @Retention( RetentionPolicy.RUNTIME )
 public @interface Subscriber {
 	boolean serialized() default true;
-	String topic() default "";
 	String name();
 }

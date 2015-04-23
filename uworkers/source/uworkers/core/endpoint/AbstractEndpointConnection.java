@@ -13,6 +13,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 
 import lombok.Getter;
+import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.extern.java.Log;
 import uworkers.api.EndpointConnection;
@@ -25,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Accessors(fluent = true)
 public abstract class AbstractEndpointConnection<T extends Session> implements ExceptionListener, EndpointConnection {
 
+	private static final String MESSAGE_CONSUMER_IS_CONCURRENTLY_CLOSED = "Message consumer is concurrently closed. See javax.jms.MessageConsumer.receive() JavaDoc for more detail.";
 	private static final int TIME_TO_WAIT_BEFORE_START_LOGGING_ERROR = 10;
 	private static final int LESS_THAN_A_MINUTE = 50;
 	private static final int SECONDS = 1000;
@@ -90,17 +92,17 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 
 	public void setupEndpoint() throws InterruptedException {
 		while (true)
-			for (Integer seconds : Fibonacci.until(LESS_THAN_A_MINUTE))
+			for (val seconds : Fibonacci.until(LESS_THAN_A_MINUTE))
 				try {
 					tryConnect();
 					return;
 				} catch (JMSException e) {
-					log.info(e.getMessage());
-					sleep(seconds);
+					log.warning(e.getMessage());
+					sleepBecauseCouldNotEstabilishConnectionWithBroker(seconds);
 				}
 	}
 
-	protected void sleep(Integer seconds) throws InterruptedException {
+	protected void sleepBecauseCouldNotEstabilishConnectionWithBroker(Integer seconds) throws InterruptedException {
 		if (seconds > TIME_TO_WAIT_BEFORE_START_LOGGING_ERROR)
 			log.warning("Could estabilish connection to broker. Trying again in " + seconds + " seconds.");
 		Thread.sleep(seconds * SECONDS);
@@ -116,7 +118,7 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 
 	@Override
 	public void connect() throws JMSException {
-		Connection<T> connection = createConnection();
+		val connection = createConnection();
 		this.connection = connection.connection();
 		this.connection.setExceptionListener(this);
 		this.currentSession = connection.session();
@@ -154,10 +156,18 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 
 	@Override
 	public void send(Object object) throws JMSException, IOException {
-		TextMessage message = currentSession.createTextMessage();
-		String jsonString = serialize(object);
+		val message = currentSession.createTextMessage();
+		val jsonString = serialize(object);
 		message.setText(jsonString);
 		producer().send(message);
+	}
+
+	@Override
+	public ParametrizedRequest sendWithParameters(Object object) throws JMSException, IOException {
+		val message = currentSession.createTextMessage();
+		val jsonString = serialize(object);
+		message.setText(jsonString);
+		return new ParametrizedRequest( message, producer() );
 	}
 
 	public String serialize(Object object) throws IOException {
@@ -166,6 +176,7 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 				return null;
 			if (!shouldSerializeBeforeSendOrReceiveObjects)
 				return object.toString();
+			System.out.println( "Serializing as JSON: " + shouldSerializeBeforeSendOrReceiveObjects );
 			return mapper.writeValueAsString(object);
 		} catch (IOException cause) {
 			throw new IOException(cause);
@@ -174,18 +185,26 @@ public abstract class AbstractEndpointConnection<T extends Session> implements E
 
 	@Override
 	public <V> V receive(Class<V> target) throws JMSException, IOException {
-		TextMessage received = (TextMessage) consumer().receive();
-		String jsonString = received.getText();
-		V unserialize = unserialize(jsonString, target);
+		val received = receiveTextMessage();
+		received.acknowledge();
+		val jsonString = received.getText();
+		val unserialize = unserialize(jsonString, target);
 		return unserialize;
 	}
 
 	@Override
-	public <V> AcknowledgeableResponse<V> receiveAcknowledgeableResponse(Class<V> target) throws JMSException, IOException {
-		TextMessage received = (TextMessage) consumer().receive();
-		String jsonString = received.getText();
-		V unserialize = unserialize(jsonString, target);
-		return new AcknowledgeableResponse<>(unserialize, received);
+	public <V> ParametrizedResponse<V> receiveParametrizedResponse(Class<V> target) throws JMSException, IOException {
+		val received = receiveTextMessage();
+		val jsonString = received.getText();
+		val unserialized = unserialize(jsonString, target);
+		return new ParametrizedResponse<>(unserialized, received);
+	}
+
+	private TextMessage receiveTextMessage() throws JMSException {
+		val received = (TextMessage) consumer().receive();
+		if ( received == null )
+			throw new JMSException( MESSAGE_CONSUMER_IS_CONCURRENTLY_CLOSED );
+		return received;
 	}
 
 	@SuppressWarnings("unchecked")

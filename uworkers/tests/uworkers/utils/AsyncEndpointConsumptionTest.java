@@ -24,7 +24,7 @@ public class AsyncEndpointConsumptionTest extends TestCase {
 	final CountDownLatch counter = new CountDownLatch( TOTAL_OF_MSGS );
 
 	@Provided MQProvider mqProvider;
-	@Provided @Worker( name = "worker.test", queue = "worker.test" ) EndpointConnection worker;
+	@Provided @Worker( name = "worker.test" ) EndpointConnection worker;
 
 	@Override
 	public void setup() throws ServiceProviderException {

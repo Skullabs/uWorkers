@@ -10,7 +10,7 @@ public class Consumers {
 		System.out.println( message.query() );
 	}
 
-	@Subscriber( topic = "test.subscriber", name = "secret")
+	@Subscriber( name = "secret")
 	public void subscribeFor( SearchMessage message ) {
 		System.out.println( message.query() );
 	}

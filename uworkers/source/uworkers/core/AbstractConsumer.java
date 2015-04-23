@@ -7,7 +7,7 @@ import javax.jms.JMSException;
 import lombok.extern.java.Log;
 import uworkers.api.Consumer;
 import uworkers.api.EndpointConnection;
-import uworkers.core.endpoint.AcknowledgeableResponse;
+import uworkers.core.endpoint.ParametrizedResponse;
 import uworkers.utils.Fibonacci;
 
 @Log
@@ -36,9 +36,8 @@ public abstract class AbstractConsumer<T> implements Runnable, Consumer<T> {
 
 	protected void receiveAndHandleMessage() throws InterruptedException {
 		try {
-			final AcknowledgeableResponse<T> received = receive();
-			final T receivedMessage = received.getResponse();
-			handle(receivedMessage);
+			final ParametrizedResponse<T> received = receive();
+			handle(received);
 			received.aknowledge();
 			waitingCounter.reset();
 		} catch (final JMSException cause) {
@@ -48,6 +47,13 @@ public abstract class AbstractConsumer<T> implements Runnable, Consumer<T> {
 		}
 	}
 
+	public void handle(final ParametrizedResponse<T> received) throws Exception {
+		final T receivedMessage = received.getResponse();
+		handle(receivedMessage);
+	}
+
+	public abstract void handle( T receivedMessage ) throws Exception;
+
 	private void handleJMSException(final JMSException cause) throws InterruptedException {
 		final Integer next = waitingCounter.next();
 		if (next > 5)
@@ -55,8 +61,8 @@ public abstract class AbstractConsumer<T> implements Runnable, Consumer<T> {
 		Thread.sleep(next * 1500);
 	}
 
-	protected AcknowledgeableResponse<T> receive() throws JMSException, IOException {
-		return endpoint().receiveAcknowledgeableResponse(getExpectedObjectClass());
+	protected ParametrizedResponse<T> receive() throws JMSException, IOException {
+		return endpoint().receiveParametrizedResponse(getExpectedObjectClass());
 	}
 
 	public abstract Class<T> getExpectedObjectClass();

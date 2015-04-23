@@ -18,21 +18,21 @@ import uworkers.api.Worker;
 public class PingPongConsumers {
 
 	@Provided
-	@Subscriber( name = "pingpong.pong", topic = "pingpong.pong" )
+	@Subscriber( name = "pingpong.pong" )
 	EndpointConnection pong;
 
 	@Provided
-	@Subscriber( name = "pingpong.pong.responses", topic = "pingpong.pong.responses" )
+	@Subscriber( name = "pingpong.pong.responses" )
 	EndpointConnection pongResp;
 
-	@Worker( queue = "ping", name = "ping" )
+	@Worker( name = "ping" )
 	public void receivePing( final Ping ping ) throws JMSException, IOException {
 		log.info( "Received ping." );
 		log.fine( ping.toString() );
 		pong.send( new Pong() );
 	}
 
-	@Subscriber( topic = "pong", name = "pong" )
+	@Subscriber( name = "pong" )
 	public void receivePong( final Pong pong ) throws JMSException, IOException {
 		log.info( "Received pong." );
 		log.fine( pong.toString() );

@@ -50,17 +50,6 @@ public class JSONStringSerializationTest extends TestCase {
 		assertEquals(SERIALIZED_STRING, receivedMessage);
 	}
 
-	@Test(timeout = 10000)
-	@SneakyThrows
-	public void ensureThatCanSendStringAndReceiveTheSameUnserializedString() {
-		Thread.sleep(1000l);
-		consumer.startAndListenMessages();
-		consumer.shouldSerializeBeforeSendOrReceiveObjects(false);
-		consumer.send(STRING);
-		val receivedMessage = consumer.receive(String.class);
-		assertEquals(STRING, receivedMessage);
-	}
-
 	@After
 	public void closeConsumers() {
 		consumer.stop();
