@@ -1,10 +1,8 @@
 package {{packageName}};
 
-{{^name}}
 @trip.spi.Singleton( exposedAs=uworkers.api.Consumer.class )
-{{/name}}
 {{#name}}
-@trip.spi.Singleton( exposedAs=uworkers.api.Consumer.class, name="{{.}}" )
+@uworkers.api.Name( "{{.}}" )
 @uworkers.api.Subscriber( name="{{.}}" )
 {{/name}}
 @uworkers.api.Autostart

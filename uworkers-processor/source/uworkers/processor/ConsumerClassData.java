@@ -7,7 +7,7 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 
-import trip.spi.inject.SingletonImplementation;
+import trip.spi.processor.SingletonImplementation;
 import uworkers.api.Subscriber;
 import uworkers.api.Worker;
 

@@ -13,8 +13,8 @@ import org.junit.Test;
 import trip.spi.Provided;
 import trip.spi.ServiceProviderException;
 import uworkers.api.EndpointConnection;
-import uworkers.api.Worker;
 import uworkers.api.UWorkerService;
+import uworkers.api.Worker;
 import uworkers.core.endpoint.MQProvider;
 
 public class AsyncEndpointConsumptionTest extends TestCase {
