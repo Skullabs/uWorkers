@@ -3,9 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>io.skullabs.uworkers</groupId>
-	<version>0.5.0-SNAPSHOT</version>
+	<version>0.5.0</version>
 	<artifactId>uworkers-parent</artifactId>
 	<name>micro Workers</name>
+	<description>Easy distributable workers thought AMQP api</description>
 	<packaging>pom</packaging>
 
 	<licenses>
