@@ -7,6 +7,7 @@
 	<artifactId>uworkers-parent</artifactId>
 	<name>micro Workers</name>
 	<description>Easy distributable workers thought AMQP api</description>
+	<url>https://github.com/Skullabs/uWorkers</url>
 	<packaging>pom</packaging>
 
 	<licenses>
@@ -16,6 +17,12 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+
+	<scm>
+        <connection>scm:git:git@github.com:Skullabs/uWorkers.git</connection>
+        <url>scm:git:git@github.com:Skullabs/uWorkers.git</url>
+        <developerConnection>scm:git:git@github.com:Skullabs/uWorkers.git</developerConnection>
+    </scm>
 
 	<developers>
 		<developer>
