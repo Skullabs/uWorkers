@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 public class Fibonacci implements Iterable<Integer>, Iterator<Integer> {
 
 	int last;
-
-	int current;
+	int current = 1;
 
 	final int limit;
 
