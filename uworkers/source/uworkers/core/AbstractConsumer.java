@@ -55,7 +55,7 @@ public abstract class AbstractConsumer<T> implements Runnable, Consumer<T> {
 	public abstract void handle( T receivedMessage ) throws Exception;
 
 	private void handleJMSException(final JMSException cause) throws InterruptedException {
-		final Integer next = waitingCounter.next();
+		final Integer next = waitingCounter.hasNext() ? waitingCounter.next() : waitingCounter.current();
 		if (next > 5)
 			handleFailure(cause);
 		Thread.sleep(next * 1500);

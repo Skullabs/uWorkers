@@ -28,4 +28,18 @@ public class FibonacciTest {
 		for ( int i=0; i<100000; i++ )
 			grantThatGenerateTheFirstValuesAsExpected();
 	}
+	
+	@Test
+	public void grantThatGenerateFibonacciInfiniteSequence(){
+		assertThat( fibonacci.next() , is( 1 ) );
+		assertThat( fibonacci.next() , is( 2 ) );
+		assertThat( fibonacci.next() , is( 3 ) );
+		assertThat( fibonacci.next() , is( 5 ) );
+		assertThat( fibonacci.next() , is( 8 ) );
+		assertThat( fibonacci.next() , is( 13 ) );
+		assertThat( fibonacci.next() , is( 21 ) );
+		assertThat( fibonacci.next() , is( 34 ) );
+		assertThat( fibonacci.next() , is( 55 ) );
+	}
+	
 }

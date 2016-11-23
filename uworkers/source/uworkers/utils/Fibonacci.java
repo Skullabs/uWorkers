@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(staticName = "until")
 public class Fibonacci implements Iterable<Integer>, Iterator<Integer> {
 
-	int last;
+	int last = 0;
 
-	int current;
+	int current = 1;
 
 	final int limit;
 
@@ -22,6 +22,10 @@ public class Fibonacci implements Iterable<Integer>, Iterator<Integer> {
 	public void reset() {
 		last = 0;
 		current = 1;
+	}
+	
+	public int current() {
+		return current;
 	}
 
 	@Override
